@@ -1,61 +1,69 @@
+import { useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { BugAntIcon, MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { useContractRead } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
+  let PVFAddress: any;
+  let PVFAbi: any;
+
+  const { data: deployedContractData } = useDeployedContractInfo("ProjectVoterFactory");
+  if (deployedContractData) {
+    ({ address: PVFAddress, abi: PVFAbi } = deployedContractData);
+  }
+
+  const { data: hackathons } = useContractRead({
+    address: PVFAddress,
+    abi: PVFAbi,
+    functionName: "getHackathons",
+  });
+
+  const [tab, setTab] = useState("ongoing");
+
+  const ongoingHackathons = hackathons?.filter(
+    (hackathon: any) => new Date() < new Date(parseInt(hackathon.endTime._hex, 16) * 1000),
+  );
+  const pastHackathons = hackathons?.filter(
+    (hackathon: any) => new Date() > new Date(parseInt(hackathon.endTime._hex, 16) * 1000),
+  );
+
+  const hackathonsToDisplay = tab === "ongoing" ? ongoingHackathons : pastHackathons;
+
   return (
     <>
       <MetaHeader />
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center mb-8">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-          </h1>
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/nextjs/pages/index.tsx</code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract <code className="italic bg-base-300 text-base font-bold">YourContract.sol</code> in{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/hardhat/contracts</code>
-          </p>
+      <div className="bg-white p-4 rounded-lg shadow space-y-2 w-full max-w-6xl mx-auto mt-10">
+        <div className="tabs">
+          <button className={`tab ${tab === "ongoing" ? "tab-active" : ""}`} onClick={() => setTab("ongoing")}>
+            Ongoing Hackathons
+          </button>
+          <button className={`tab ${tab === "past" ? "tab-active" : ""}`} onClick={() => setTab("past")}>
+            Past Hackathons
+          </button>
         </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {hackathonsToDisplay?.map((hackathon: any) => {
+            const startTime = new Date(parseInt(hackathon.startTime._hex, 16) * 1000).toLocaleDateString();
+            const endTime = new Date(parseInt(hackathon.endTime._hex, 16) * 1000).toLocaleDateString();
 
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contract
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <SparklesIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Experiment with{" "}
-                <Link href="/example-ui" passHref className="link">
-                  Example UI
-                </Link>{" "}
-                to build your own UI.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-          </div>
+            console.log(hackathon.projectVoterAddress);
+            return (
+              <div key={hackathon.name} className="card shadow-sm m-2">
+                <div className="card-body bg-base-300">
+                  <h2 className="card-title">{hackathon.name}</h2>
+                  <p className="p-0 m-0">Start time: {startTime}</p>
+                  <p className="p-0 m-0">End time: {endTime}</p>
+                  <div className="card-actions justify-end mt-2">
+                    <Link href={`/hackathons/${encodeURIComponent(hackathon.projectVoterAddress)}`}>
+                      <button className="btn btn-primary">Vote</button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
