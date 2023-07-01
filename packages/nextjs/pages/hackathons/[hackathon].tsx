@@ -37,7 +37,7 @@ const HackathonPage: NextPage = () => {
     <div className="flex justify-center">
       <div className="mx-auto mt-10 w-full max-w-6xl space-y-2">
         <div className="mb-4 flex justify-center">
-          <ul className="menu menu-horizontal bg-base-100 rounded-box">
+          <ul className="menu rounded-box menu-horizontal bg-base-100">
             <li onClick={() => setActiveTab("vote")}>
               <a className={activeTab === "vote" ? "active" : ""}>Vote for Projects</a>
             </li>
@@ -48,7 +48,7 @@ const HackathonPage: NextPage = () => {
         </div>
 
         {activeTab === "vote" ? (
-          <table className="table table-zebra w-full shadow-lg">
+          <table className="table-zebra table w-full shadow-lg">
             <thead>
               <tr>
                 <th className="bg-primary">Project Name</th>
@@ -62,7 +62,7 @@ const HackathonPage: NextPage = () => {
                   <td>{project.name}</td>
                   <td>{project.url}</td>
                   <td className="text-right">
-                    <button onClick={() => write?.()} className="btn px-4 py-2 bg-blue-500 text-white rounded">
+                    <button onClick={() => write?.()} className="btn rounded bg-blue-500 px-4 py-2 text-white">
                       Vote
                     </button>
                   </td>
@@ -73,7 +73,7 @@ const HackathonPage: NextPage = () => {
         ) : typeof hackathon === "string" ? (
           <AddVotersAndProjects contractConfig={contractConfig} />
         ) : (
-          <div className="p-4 bg-red-500 text-white rounded-lg">Error: Invalid hackathon address</div>
+          <div className="rounded-lg bg-red-500 p-4 text-white">Error: Invalid hackathon address</div>
         )}
       </div>
     </div>
