@@ -11,6 +11,7 @@ contract ProjectVoter {
     string public hackathonName;
     address public owner;
     mapping(address => bool) public voters;
+    address[] public voterAddresses; // Added line
     Project[] public projects;
     uint public voteStart;
     uint public voteEnd;
@@ -44,6 +45,7 @@ contract ProjectVoter {
     function addVoters(address[] calldata _voters) public onlyOwner {
         for (uint i = 0; i < _voters.length; i++) {
             voters[_voters[i]] = true;
+            voterAddresses.push(_voters[i]); // Added line
             emit VoterAdded(_voters[i]);
         }
     }
@@ -61,5 +63,13 @@ contract ProjectVoter {
         require(_projectId < projects.length, "Invalid project ID");
         projects[_projectId].voteCount += 1;
         emit VoteCast(msg.sender, _projectId);
+    }
+
+    function getProjects() public view returns(Project[] memory) {
+        return projects;
+    }
+
+    function getVoters() public view returns(address[] memory) {
+        return voterAddresses;
     }
 }

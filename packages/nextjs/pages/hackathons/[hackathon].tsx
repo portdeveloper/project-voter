@@ -8,11 +8,9 @@ import { abi } from "~~/generated/ProjectVoterAbi";
 
 const HackathonPage: NextPage = () => {
   const router = useRouter();
-
   const { hackathon } = router.query;
   const [activeTab, setActiveTab] = useState<"vote" | "add">("vote");
   const [contractConfig, setContractConfig] = useState<{ address: string; abi: any } | null>(null);
-  console.log(router.query);
 
   useEffect(() => {
     if (router.isReady && hackathon) {
@@ -25,7 +23,7 @@ const HackathonPage: NextPage = () => {
 
   const { data: hackathonProjects } = useContractRead({
     ...contractConfig,
-    functionName: "projects",
+    functionName: "getProjects",
   });
 
   const { write } = useContractWrite({
@@ -44,7 +42,6 @@ const HackathonPage: NextPage = () => {
         >
           Vote
         </button>
-
         <button
           className={`px-4 py-2 ${activeTab === "add" ? "border-b-2 border-blue-500 font-medium text-blue-500" : ""}`}
           onClick={() => setActiveTab("add")}
@@ -56,9 +53,9 @@ const HackathonPage: NextPage = () => {
       {activeTab === "vote" ? (
         <div>
           This is for voting
-          {hackathonProjects?.map((project: any) => {
+          {hackathonProjects?.map((project: any, index) => {
             return (
-              <div key={project.name}>
+              <div key={index}>
                 <h2>{project.name}</h2>
                 <p>{project.url}</p>
                 <button onClick={() => write?.()}>Vote</button>
