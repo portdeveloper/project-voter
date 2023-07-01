@@ -67,7 +67,7 @@ const HackathonPage: NextPage = () => {
           })}
         </div>
       ) : typeof hackathon === "string" ? (
-        <AddVotersAndProjects address={contractConfig?.address} />
+        <AddVotersAndProjects contractConfig={contractConfig} />
       ) : (
         <div>Error: Invalid hackathon address</div>
       )}

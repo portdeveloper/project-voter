@@ -1,17 +1,9 @@
 import { useContractEvent } from "wagmi";
-import { abi } from "~~/generated/ProjectVoterAbi";
 
-export const AddVotersAndProjects = ({ address }: { address: string | undefined }) => {
-  const contractConfig = {
-    address: address,
-    abi: abi,
-  } as const;
-
+export const AddVotersAndProjects = ({ contractConfig }: { contractConfig: { address: string; abi: any } | null }) => {
   useContractEvent({
     ...contractConfig,
-
     eventName: "VoteCast",
-
     listener(log) {
       console.log(log);
     },
