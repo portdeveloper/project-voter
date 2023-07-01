@@ -34,7 +34,7 @@ const Home: NextPage = () => {
   return (
     <>
       <MetaHeader />
-      <div className="bg-white p-4 rounded-lg shadow space-y-2 w-full max-w-6xl mx-auto mt-10">
+      <div className="mx-auto mt-10 w-full max-w-6xl space-y-2 rounded-lg bg-white p-4 shadow">
         <div className="tabs">
           <button className={`tab ${tab === "ongoing" ? "tab-active" : ""}`} onClick={() => setTab("ongoing")}>
             Ongoing Hackathons
@@ -43,19 +43,18 @@ const Home: NextPage = () => {
             Past Hackathons
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {hackathonsToDisplay?.map((hackathon: any) => {
             const startTime = new Date(parseInt(hackathon.startTime._hex, 16) * 1000).toLocaleDateString();
             const endTime = new Date(parseInt(hackathon.endTime._hex, 16) * 1000).toLocaleDateString();
 
-            console.log(hackathon.projectVoterAddress);
             return (
-              <div key={hackathon.name} className="card shadow-sm m-2">
+              <div key={hackathon.name} className="card m-2 shadow-sm">
                 <div className="card-body bg-base-300">
                   <h2 className="card-title">{hackathon.name}</h2>
-                  <p className="p-0 m-0">Start time: {startTime}</p>
-                  <p className="p-0 m-0">End time: {endTime}</p>
-                  <div className="card-actions justify-end mt-2">
+                  <p className="m-0 p-0">Start time: {startTime}</p>
+                  <p className="m-0 p-0">End time: {endTime}</p>
+                  <div className="card-actions mt-2 justify-end">
                     <Link href={`/hackathons/${encodeURIComponent(hackathon.projectVoterAddress)}`}>
                       <button className="btn btn-primary">Vote</button>
                     </Link>
