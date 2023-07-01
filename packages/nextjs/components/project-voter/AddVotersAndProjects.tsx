@@ -40,8 +40,6 @@ export const AddVotersAndProjects = ({ contractConfig }: { contractConfig: { add
     args: [[newProject.name], [newProject.url]],
   });
 
-  console.log("Projects:", hackathonProjects);
-
   return (
     <div>
       <p>This is a page for adding voters and projects</p>
