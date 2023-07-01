@@ -38,17 +38,10 @@ const HackathonPage: NextPage = () => {
   const { config } = usePrepareContractWrite({
     ...contractConfig,
     functionName: "vote",
-    args: [ethers.BigNumber.from("0")],
+    // args: [ethers.BigNumber.from("0")],
   });
 
   const { write } = useContractWrite(config);
-
-  // const { write } = useContractWrite({
-  //   ...contractConfig,
-  //   mode: "recklesslyUnprepared",
-  //   functionName: "vote",
-  //   // args: [ethers.BigNumber.from("0")],
-  // });
 
   return (
     <div className="flex justify-center">
@@ -82,9 +75,8 @@ const HackathonPage: NextPage = () => {
                   <td>{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
                   <td className="text-right">
                     <button
-                      onClick={() => {
-                        (write as any)?.({ args: [ethers.BigNumber.from(1)] });
-                      }}
+                      disabled={!write}
+                      // onClick={() => write?.({ args: [ethers.BigNumber.from(index)] })}
                       className="btn rounded bg-blue-500 px-4 py-2 text-white"
                     >
                       Vote
