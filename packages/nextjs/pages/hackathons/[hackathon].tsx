@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
-import { useContractRead, useContractWrite } from "wagmi";
+import { useContractEvent, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { AddVotersAndProjects } from "~~/components/project-voter/AddVotersAndProjects";
 import { abi } from "~~/generated/ProjectVoterAbi";
 
@@ -11,6 +11,20 @@ const HackathonPage: NextPage = () => {
   const { hackathon } = router.query;
   const [activeTab, setActiveTab] = useState<"vote" | "add">("vote");
   const [contractConfig, setContractConfig] = useState<{ address: string; abi: any } | null>(null);
+
+  const { data: hackathonProjects, refetch } = useContractRead({
+    ...contractConfig,
+    functionName: "getProjects",
+  });
+
+  useContractEvent({
+    ...contractConfig,
+    eventName: "VoteCast",
+    listener(voter, projectId) {
+      console.log(`Voted! name: ${voter} - url: ${projectId}`);
+      refetch();
+    },
+  });
 
   useEffect(() => {
     if (router.isReady && hackathon) {
@@ -21,17 +35,20 @@ const HackathonPage: NextPage = () => {
     }
   }, [router.isReady, hackathon]);
 
-  const { data: hackathonProjects } = useContractRead({
+  const { config } = usePrepareContractWrite({
     ...contractConfig,
-    functionName: "getProjects",
-  });
-
-  const { write } = useContractWrite({
-    ...contractConfig,
-    mode: "recklesslyUnprepared",
     functionName: "vote",
     args: [ethers.BigNumber.from("0")],
   });
+
+  const { write } = useContractWrite(config);
+
+  // const { write } = useContractWrite({
+  //   ...contractConfig,
+  //   mode: "recklesslyUnprepared",
+  //   functionName: "vote",
+  //   // args: [ethers.BigNumber.from("0")],
+  // });
 
   return (
     <div className="flex justify-center">
@@ -53,6 +70,7 @@ const HackathonPage: NextPage = () => {
               <tr>
                 <th className="bg-primary">Project Name</th>
                 <th className="bg-primary">Project URL</th>
+                <th className="bg-primary">Vote Count</th>
                 <th className="bg-primary text-end">Vote</th>
               </tr>
             </thead>
@@ -61,8 +79,14 @@ const HackathonPage: NextPage = () => {
                 <tr key={index}>
                   <td>{project.name}</td>
                   <td>{project.url}</td>
+                  <td>{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
                   <td className="text-right">
-                    <button onClick={() => write?.()} className="btn rounded bg-blue-500 px-4 py-2 text-white">
+                    <button
+                      onClick={() => {
+                        (write as any)?.({ args: [ethers.BigNumber.from(1)] });
+                      }}
+                      className="btn rounded bg-blue-500 px-4 py-2 text-white"
+                    >
                       Vote
                     </button>
                   </td>
