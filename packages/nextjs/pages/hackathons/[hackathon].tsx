@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
-import { useContractEvent, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractEvent, useContractRead } from "wagmi";
 import { AddVotersAndProjects } from "~~/components/project-voter/AddVotersAndProjects";
+import { VoteButton } from "~~/components/project-voter/VoteButton";
 import { abi } from "~~/generated/ProjectVoterAbi";
 
 const HackathonPage: NextPage = () => {
@@ -34,14 +35,6 @@ const HackathonPage: NextPage = () => {
       });
     }
   }, [router.isReady, hackathon]);
-
-  const { config } = usePrepareContractWrite({
-    ...contractConfig,
-    functionName: "vote",
-    // args: [ethers.BigNumber.from("0")],
-  });
-
-  const { write } = useContractWrite(config);
 
   return (
     <div className="flex justify-center">
@@ -74,13 +67,7 @@ const HackathonPage: NextPage = () => {
                   <td>{project.url}</td>
                   <td>{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
                   <td className="text-right">
-                    <button
-                      disabled={!write}
-                      // onClick={() => write?.({ args: [ethers.BigNumber.from(index)] })}
-                      className="btn rounded bg-blue-500 px-4 py-2 text-white"
-                    >
-                      Vote
-                    </button>
+                    <VoteButton index={index} contractConfig={contractConfig} />
                   </td>
                 </tr>
               ))}
