@@ -62,7 +62,7 @@ const HackathonPage: NextPage = () => {
                   <td>{project.name}</td>
                   <td>{project.url}</td>
                   <td className="text-right">
-                    <button onClick={() => write?.()} className="px-4 py-2 bg-blue-500 text-white rounded">
+                    <button onClick={() => write?.()} className="btn px-4 py-2 bg-blue-500 text-white rounded">
                       Vote
                     </button>
                   </td>
