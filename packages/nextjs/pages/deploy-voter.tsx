@@ -24,7 +24,7 @@ const DeployVoter: NextPage = () => {
     args: [owner, ethers.BigNumber.from(votingPeriodInDays), hackathonName],
   });
 
-  const { write } = useContractWrite(config);
+  const { write, data } = useContractWrite(config);
 
   return (
     <div className="flex justify-center mx-auto">
@@ -52,6 +52,7 @@ const DeployVoter: NextPage = () => {
             Deploy
           </button>
         </div>
+        <div>ProjectVoter deployed! Tx hash: {data?.hash}</div>
       </div>
     </div>
   );

@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import { AddProjectForm } from "./AddProjectForm";
+import { AddVoterForm } from "./AddVoterForm";
+import { ProjectsList } from "./ProjectsList";
+import { VotersList } from "./VotersList";
 import { useContractEvent, useContractRead, useContractWrite } from "wagmi";
 
 type Project = { name: string; url: string };
@@ -78,73 +82,17 @@ export const AddVotersAndProjects = ({ contractConfig }: { contractConfig: { add
   });
 
   return (
-    <div className="mx-auto mt-10 w-full max-w-6xl">
-      <div className="mb-4">
-        <form onSubmit={handleProjectSubmit} className="mb-4 flex space-x-4">
-          <input
-            name="name"
-            value={newProject.name}
-            onChange={handleProjectChange}
-            placeholder="Project name"
-            className="form-input w-1/2 rounded-md px-4 py-2 shadow-md"
-          />
-          <input
-            name="url"
-            value={newProject.url}
-            onChange={handleProjectChange}
-            placeholder="Project URL"
-            className="form-input w-1/2 rounded-md px-4 py-2 shadow-md"
-          />
-          <button className="btn btn-primary">Add Project</button>
-        </form>
-        <form onSubmit={handleVoterSubmit} className="mb-4 flex space-x-4">
-          <input
-            name="address"
-            value={newVoter}
-            onChange={handleVoterChange}
-            placeholder="Address"
-            className="form-input w-full rounded-md px-4 py-2 shadow-md"
-          />
-          <button className="btn btn-primary">Add Voter</button>
-        </form>
-      </div>
-      <div>
-        <h2 className="mb-2 text-lg font-bold">Your added projects:</h2>
-        <table className="table-zebra table w-full shadow-lg">
-          <thead>
-            <tr>
-              <th className="bg-primary">Project Name</th>
-              <th className="bg-primary">Project URL</th>
-            </tr>
-          </thead>
-          <tbody>
-            {hackathonProjects?.map((project: any, index) => (
-              <tr key={index}>
-                <td>{project.name}</td>
-                <td>{project.url}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <h2 className="mb-2 text-lg font-bold">Your added voters:</h2>
-        <table className="table-zebra table w-full shadow-lg">
-          <thead>
-            <tr>
-              <th className="bg-primary">Voter Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            {voterAddresses &&
-              (voterAddresses as string[]).map((address: string, index) => (
-                <tr key={index}>
-                  <td>{address}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+    <div>
+      <AddProjectForm
+        newProject={newProject}
+        handleProjectChange={handleProjectChange}
+        handleProjectSubmit={handleProjectSubmit}
+      />
+
+      <AddVoterForm newVoter={newVoter} handleVoterChange={handleVoterChange} handleVoterSubmit={handleVoterSubmit} />
+
+      <ProjectsList projects={(hackathonProjects as Project[]) || []} />
+      <VotersList voters={(voterAddresses as string[]) || []} />
     </div>
   );
 };
