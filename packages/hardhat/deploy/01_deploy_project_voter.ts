@@ -8,7 +8,7 @@ const deployProjectVoter: DeployFunction = async function (hre: HardhatRuntimeEn
   await deploy("ProjectVoter", {
     from: deployer,
     log: true,
-    args: ["0xd73309cCe5DaEe457CA9BEb63EdA39D3c5dF036F", "1", "hackathon1"],
+    args: ["0x3D8F33965A152F8Cad7A236485ED05ea288e0698", "1", "hackathon1"],
     autoMine: true,
   });
 };
