@@ -3,8 +3,7 @@ import { useRouter } from "next/router";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { useContractEvent, useContractRead } from "wagmi";
-import { AddVotersAndProjects } from "~~/components/project-voter/AddVotersAndProjects";
-import { VoteButton } from "~~/components/project-voter/VoteButton";
+import { ProjectsManager, VoteButton, VotersManager } from "~~/components/project-voter/";
 import { abi } from "~~/generated/ProjectVoterAbi";
 
 const HackathonPage: NextPage = () => {
@@ -74,7 +73,10 @@ const HackathonPage: NextPage = () => {
             </tbody>
           </table>
         ) : typeof hackathon === "string" ? (
-          <AddVotersAndProjects contractConfig={contractConfig} />
+          <div className="m-10 w-full max-w-6xl flex gap-10">
+            <ProjectsManager contractConfig={contractConfig} />
+            <VotersManager contractConfig={contractConfig} />
+          </div>
         ) : (
           <div className="rounded-lg bg-red-500 p-4 text-white">Error: Invalid hackathon address</div>
         )}

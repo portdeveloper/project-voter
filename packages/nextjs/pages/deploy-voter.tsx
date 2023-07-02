@@ -4,6 +4,8 @@ import type { NextPage } from "next";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
+// TODO: Add error handling
+
 const DeployVoter: NextPage = () => {
   const [owner, setOwner] = useState("");
   const [votingPeriodInDays, setVotingPeriodInDays] = useState(0);
