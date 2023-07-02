@@ -39,7 +39,7 @@ const HackathonPage: NextPage = () => {
   return (
     <div className="flex justify-center">
       <div className="mx-auto mt-10 w-full max-w-6xl space-y-2">
-        <div className="mb-4 flex justify-center">
+        <div className="mb-4 flex justify-center mb-10">
           <ul className="menu rounded-box menu-horizontal bg-base-100">
             <li onClick={() => setActiveTab("vote")}>
               <a className={activeTab === "vote" ? "active" : ""}>Vote for Projects</a>
