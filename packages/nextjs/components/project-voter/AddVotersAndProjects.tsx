@@ -9,9 +9,11 @@ type Project = { name: string; url: string };
 
 export const AddVotersAndProjects = ({ contractConfig }: { contractConfig: { address: string; abi: any } | null }) => {
   const [newProject, setNewProject] = useState<Project>({ name: "", url: "" });
-  const [newProjects, setNewProjects] = useState<Project[]>([]); // NEW
+  const [newProjects, setNewProjects] = useState<Project[]>([]);
   const [newVoter, setNewVoter] = useState<string>("");
-  const [newVoters, setNewVoters] = useState<string[]>([]); // NEW
+  const [newVoters, setNewVoters] = useState<string[]>([]);
+  const [editingProject, setEditingProject] = useState<number | null>(null);
+  const [editingVoter, setEditingVoter] = useState<number | null>(null);
 
   const { data: hackathonProjects, refetch: refetchProjects } = useContractRead({
     ...contractConfig,
@@ -59,14 +61,70 @@ export const AddVotersAndProjects = ({ contractConfig }: { contractConfig: { add
 
   const handleProjectSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setNewProjects([...newProjects, newProject]); // Add new project to list
+
+    // Prevent submitting empty name or url
+    if (!newProject.name.trim() || !newProject.url.trim()) {
+      alert("Both name and url are required!");
+      return;
+    }
+
+    // Prevent duplicate project entries
+    if (newProjects.some(project => project.name === newProject.name && project.url === newProject.url)) {
+      alert("Project is already added!");
+      return;
+    }
+
+    if (editingProject !== null) {
+      setNewProjects(newProjects.map((project, i) => (i === editingProject ? newProject : project)));
+      setEditingProject(null);
+    } else {
+      setNewProjects([...newProjects, newProject]);
+    }
+
     setNewProject({ name: "", url: "" });
   };
 
   const handleVoterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setNewVoters([...newVoters, newVoter]); // Add new voter to list
+
+    // Prevent submitting empty address
+    if (!newVoter.trim()) {
+      alert("Address is required!");
+      return;
+    }
+
+    // Prevent duplicate voter entries
+    if (newVoters.includes(newVoter)) {
+      alert("Voter is already added!");
+      return;
+    }
+
+    if (editingVoter !== null) {
+      setNewVoters(newVoters.map((voter, i) => (i === editingVoter ? newVoter : voter)));
+      setEditingVoter(null);
+    } else {
+      setNewVoters([...newVoters, newVoter]);
+    }
+
     setNewVoter("");
+  };
+
+  const handleProjectEdit = (index: number) => {
+    setNewProject(newProjects[index]);
+    setEditingProject(index);
+  };
+
+  const handleProjectDelete = (index: number) => {
+    setNewProjects(newProjects.filter((_, i) => i !== index));
+  };
+
+  const handleVoterEdit = (index: number) => {
+    setNewVoter(newVoters[index]);
+    setEditingVoter(index);
+  };
+
+  const handleVoterDelete = (index: number) => {
+    setNewVoters(newVoters.filter((_, i) => i !== index));
   };
 
   const handleWriteProjects = () => {
@@ -102,15 +160,38 @@ export const AddVotersAndProjects = ({ contractConfig }: { contractConfig: { add
             handleProjectChange={handleProjectChange}
             handleProjectSubmit={handleProjectSubmit}
           />
-
           <div className="mt-4 text-xl text-primary-content">New Projects:</div>
-          <ul className="list-disc list-inside mt-2 text-primary-content">
-            {newProjects.map((project, i) => (
-              <li key={i} className="ml-5">
-                {project.name} - {project.url}
-              </li>
-            ))}
-          </ul>
+          <table className="table-auto table-zebra table w-full mt-2 text-primary-content">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {newProjects.length === 0 ? (
+                <tr>
+                  <td colSpan={3}>No projects added yet.</td>
+                </tr>
+              ) : (
+                newProjects.map((project, i) => (
+                  <tr key={i}>
+                    <td>{project.name}</td>
+                    <td>{project.url}</td>
+                    <td className="flex items-center space-x-2">
+                      <button className="btn btn-xs btn-outline btn-primary" onClick={() => handleProjectEdit(i)}>
+                        Edit
+                      </button>
+                      <button className="btn btn-xs btn-outline btn-error" onClick={() => handleProjectDelete(i)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
           <button className="btn btn-primary mt-4" onClick={handleWriteProjects} disabled={newProjects.length === 0}>
             Write Projects to the Contract
           </button>
@@ -121,15 +202,36 @@ export const AddVotersAndProjects = ({ contractConfig }: { contractConfig: { add
             handleVoterChange={handleVoterChange}
             handleVoterSubmit={handleVoterSubmit}
           />
-
           <div className="mt-4 text-xl text-secondary-content">New Voters:</div>
-          <ul className="list-disc list-inside mt-2 text-secondary-content">
-            {newVoters.map((address, i) => (
-              <li key={i} className="ml-5">
-                {address}
-              </li>
-            ))}
-          </ul>
+          <table className="table-auto table-zebra table w-full mt-2 text-secondary-content">
+            <thead>
+              <tr>
+                <th>Address</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {newVoters.length === 0 ? (
+                <tr>
+                  <td colSpan={2}>No voters added yet.</td>
+                </tr>
+              ) : (
+                newVoters.map((address, i) => (
+                  <tr key={i}>
+                    <td>{address}</td>
+                    <td className="flex items-center space-x-2">
+                      <button className="btn btn-xs btn-outline btn-primary" onClick={() => handleVoterEdit(i)}>
+                        Edit
+                      </button>
+                      <button className="btn btn-xs btn-outline btn-error" onClick={() => handleVoterDelete(i)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
           <button className="btn btn-primary mt-4" onClick={handleWriteVoters} disabled={newVoters.length === 0}>
             Write Voters to the Contract
           </button>
