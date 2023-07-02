@@ -3,7 +3,7 @@ interface VotersListProps {
 }
 
 export const VotersList = ({ voters }: VotersListProps) => (
-  <div className="p-6 rounded-md shadow-sm bg-secondary">
+  <div className="rounded-md shadow-sm bg-secondary">
     <h2 className="mb-2 text-xl text-primary-content">Your added voters:</h2>
     {voters.length > 0 ? (
       <table className="table table-zebra mt-4 w-full">

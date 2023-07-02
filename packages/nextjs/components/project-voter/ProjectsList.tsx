@@ -3,7 +3,7 @@ interface ProjectsListProps {
 }
 
 export const ProjectsList = ({ projects }: ProjectsListProps) => (
-  <div className="p-6 rounded-md shadow-sm bg-secondary">
+  <div className="rounded-md shadow-sm bg-secondary">
     <h2 className="mb-2 text-xl text-primary-content">Your added projects:</h2>
     {projects.length > 0 ? (
       <table className="table table-zebra mt-4 w-full">

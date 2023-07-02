@@ -84,43 +84,44 @@ export const ProjectsManager = ({ contractConfig }: { contractConfig: { address:
         handleProjectSubmit={handleProjectSubmit}
       />
       <div className="mt-4 text-xl text-primary-content">New Projects:</div>
-      <table className="table-auto table-zebra table w-full mt-2 text-primary-content">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>URL</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {newProjects.length === 0 ? (
+      <div className="overflow-auto">
+        <table className="table-auto table-zebra table w-full mt-2 text-primary-content">
+          <thead>
             <tr>
-              <td colSpan={3}>No projects added yet.</td>
+              <th>Name</th>
+              <th>URL</th>
+              <th>Actions</th>
             </tr>
-          ) : (
-            newProjects.map((project, i) => (
-              <tr key={i}>
-                <td>{project.name}</td>
-                <td>{project.url}</td>
-                <td className="flex items-center space-x-2">
-                  <button className="btn btn-xs btn-outline btn-primary" onClick={() => handleProjectEdit(i)}>
-                    Edit
-                  </button>
-                  <button className="btn btn-xs btn-outline btn-error" onClick={() => handleProjectDelete(i)}>
-                    Delete
-                  </button>
-                </td>
+          </thead>
+          <tbody>
+            {newProjects.length === 0 ? (
+              <tr>
+                <td colSpan={3}>No projects added yet.</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              newProjects.map((project, i) => (
+                <tr key={i}>
+                  <td>{project.name}</td>
+                  <td>{project.url}</td>
+                  <td className="flex items-center space-x-2">
+                    <button className="btn btn-xs btn-outline btn-primary" onClick={() => handleProjectEdit(i)}>
+                      Edit
+                    </button>
+                    <button className="btn btn-xs btn-outline btn-error" onClick={() => handleProjectDelete(i)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
       <button className="btn btn-primary mt-4" onClick={handleWriteProjects} disabled={newProjects.length === 0}>
         Write Projects to the Contract
       </button>
-      <div>
-        <ProjectsList projects={(hackathonProjects as Project[]) || []} />
-      </div>
+      <hr className="my-4 border-t-2 border-gray-300" />
+      <ProjectsList projects={(hackathonProjects as Project[]) || []} />
     </div>
   );
 };

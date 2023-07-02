@@ -110,6 +110,7 @@ export const VotersManager = ({ contractConfig }: { contractConfig: { address: s
       <button className="btn btn-primary mt-4" onClick={handleWriteVoters} disabled={newVoters.length === 0}>
         Write Voters to the Contract
       </button>
+      <hr className="my-4 border-t-2 border-gray-300" />
       <VotersList voters={(voterAddresses as string[]) || []} />
     </div>
   );

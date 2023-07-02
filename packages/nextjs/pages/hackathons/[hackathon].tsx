@@ -37,8 +37,8 @@ const HackathonPage: NextPage = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="mx-auto mt-10 w-full max-w-6xl space-y-2">
-        <div className="mb-4 flex justify-center mb-10">
+      <div className="mx-auto mt-5 w-full space-y-2 flex flex-col items-center">
+        <div className="mb-4 flex justify-center items-center">
           <ul className="menu rounded-box menu-horizontal bg-base-100">
             <li onClick={() => setActiveTab("vote")}>
               <a className={activeTab === "vote" ? "active" : ""}>Vote for Projects</a>
@@ -50,32 +50,38 @@ const HackathonPage: NextPage = () => {
         </div>
 
         {activeTab === "vote" ? (
-          <table className="table-zebra table w-full shadow-lg">
-            <thead>
-              <tr>
-                <th className="bg-primary">Project Name</th>
-                <th className="bg-primary">Project URL</th>
-                <th className="bg-primary">Vote Count</th>
-                <th className="bg-primary text-end">Vote</th>
-              </tr>
-            </thead>
-            <tbody>
-              {hackathonProjects?.map((project: any, index) => (
-                <tr key={index}>
-                  <td>{project.name}</td>
-                  <td>{project.url}</td>
-                  <td>{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
-                  <td className="text-right">
-                    <VoteButton index={index} contractConfig={contractConfig} />
-                  </td>
+          <div className="w-full flex flex-col items-center">
+            <table className="table table-zebra  w-full max-w-screen-xl shadow-lg">
+              <thead>
+                <tr>
+                  <th className="bg-primary">Project Name</th>
+                  <th className="bg-primary">Project URL</th>
+                  <th className="bg-primary">Vote Count</th>
+                  <th className="bg-primary text-end">Vote</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {hackathonProjects?.map((project: any, index) => (
+                  <tr key={index}>
+                    <td>{project.name}</td>
+                    <td>{project.url}</td>
+                    <td>{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
+                    <td className="text-right">
+                      <VoteButton index={index} contractConfig={contractConfig} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : typeof hackathon === "string" ? (
-          <div className="m-10 w-full max-w-6xl flex gap-10">
-            <ProjectsManager contractConfig={contractConfig} />
-            <VotersManager contractConfig={contractConfig} />
+          <div className="w-full px-10 flex gap-10">
+            <div className="w-1/2">
+              <ProjectsManager contractConfig={contractConfig} />
+            </div>
+            <div className="w-1/2">
+              <VotersManager contractConfig={contractConfig} />
+            </div>
           </div>
         ) : (
           <div className="rounded-lg bg-red-500 p-4 text-white">Error: Invalid hackathon address</div>
