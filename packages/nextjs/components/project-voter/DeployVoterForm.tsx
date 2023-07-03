@@ -3,19 +3,19 @@ import { ethers } from "ethers";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 interface DeployVoterFormProps {
-  PVFAddress: string;
-  PVFAbi: any[]; // replace with abi type ?
+  HVFAddress: string;
+  HVFAbi: any[]; // replace with abi type ?
 }
 
-export const DeployVoterForm = ({ PVFAddress, PVFAbi }: DeployVoterFormProps) => {
+export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) => {
   const [owner, setOwner] = useState("");
   const [votingPeriodInDays, setVotingPeriodInDays] = useState(0);
   const [hackathonName, setHackathonName] = useState("");
 
   const { config } = usePrepareContractWrite({
-    address: PVFAddress,
-    abi: PVFAbi,
-    functionName: "createProjectVoter",
+    address: HVFAddress,
+    abi: HVFAbi,
+    functionName: "createHackathonVoter",
     args: [owner, ethers.BigNumber.from(votingPeriodInDays), hackathonName],
   });
 
@@ -47,7 +47,7 @@ export const DeployVoterForm = ({ PVFAddress, PVFAbi }: DeployVoterFormProps) =>
             Deploy
           </button>
         </div>
-        <div>ProjectVoter deployed! Tx hash: {data?.hash}</div>
+        <div>HackathonVoter deployed! Tx hash: {data?.hash}</div>
       </div>
     </div>
   );

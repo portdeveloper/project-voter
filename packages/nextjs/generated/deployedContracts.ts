@@ -4,8 +4,8 @@ const contracts = {
       chainId: "31337",
       name: "localhost",
       contracts: {
-        ProjectVoter: {
-          address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+        HackathonVoter: {
+          address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
           abi: [
             {
               inputs: [
@@ -158,7 +158,7 @@ const contracts = {
                       type: "uint256",
                     },
                   ],
-                  internalType: "struct ProjectVoter.Project[]",
+                  internalType: "struct HackathonVoter.Project[]",
                   name: "",
                   type: "tuple[]",
                 },
@@ -337,8 +337,8 @@ const contracts = {
             },
           ],
         },
-        ProjectVoterFactory: {
-          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        HackathonVoterFactory: {
+          address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
           abi: [
             {
               inputs: [
@@ -363,7 +363,7 @@ const contracts = {
                 {
                   indexed: false,
                   internalType: "address",
-                  name: "projectVoterAddress",
+                  name: "hackathonVoterAddress",
                   type: "address",
                 },
                 {
@@ -373,7 +373,7 @@ const contracts = {
                   type: "string",
                 },
               ],
-              name: "ProjectVoterCreated",
+              name: "HackathonVoterCreated",
               type: "event",
             },
             {
@@ -394,7 +394,7 @@ const contracts = {
                   type: "string",
                 },
               ],
-              name: "createProjectVoter",
+              name: "createHackathonVoter",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
@@ -407,7 +407,7 @@ const contracts = {
                   components: [
                     {
                       internalType: "address",
-                      name: "projectVoterAddress",
+                      name: "hackathonVoterAddress",
                       type: "address",
                     },
                     {
@@ -426,7 +426,7 @@ const contracts = {
                       type: "uint256",
                     },
                   ],
-                  internalType: "struct ProjectVoterFactory.Hackathon[]",
+                  internalType: "struct HackathonVoterFactory.Hackathon[]",
                   name: "",
                   type: "tuple[]",
                 },
@@ -446,7 +446,7 @@ const contracts = {
               outputs: [
                 {
                   internalType: "address",
-                  name: "projectVoterAddress",
+                  name: "hackathonVoterAddress",
                   type: "address",
                 },
                 {

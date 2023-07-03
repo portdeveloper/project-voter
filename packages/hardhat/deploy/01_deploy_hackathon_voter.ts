@@ -1,11 +1,11 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 
-const deployProjectVoter: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployHackathonVoter: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("ProjectVoter", {
+  await deploy("HackathonVoter", {
     from: deployer,
     log: true,
     args: ["0x3D8F33965A152F8Cad7A236485ED05ea288e0698", "1", "hackathon1"],
@@ -13,6 +13,6 @@ const deployProjectVoter: DeployFunction = async function (hre: HardhatRuntimeEn
   });
 };
 
-export default deployProjectVoter;
+export default deployHackathonVoter;
 
-deployProjectVoter.tags = ["ProjectVoter"];
+deployHackathonVoter.tags = ["HackathonVoter"];

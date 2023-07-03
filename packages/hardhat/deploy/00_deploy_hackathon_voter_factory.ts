@@ -7,7 +7,7 @@ import { DeployFunction } from "hardhat-deploy/types";
  *
  * @param hre HardhatRuntimeEnvironment object.
  */
-const deployProjectVoterFactory: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployHackathonVoterFactory: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   /*
     On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
 
@@ -21,7 +21,7 @@ const deployProjectVoterFactory: DeployFunction = async function (hre: HardhatRu
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("ProjectVoterFactory", {
+  await deploy("HackathonVoterFactory", {
     from: deployer,
     // Contract constructor arguments
     log: true,
@@ -35,8 +35,8 @@ const deployProjectVoterFactory: DeployFunction = async function (hre: HardhatRu
   // const yourContract = await hre.ethers.getContract("YourContract", deployer);
 };
 
-export default deployProjectVoterFactory;
+export default deployHackathonVoterFactory;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployProjectVoterFactory.tags = ["ProjectVoterFactory"];
+deployHackathonVoterFactory.tags = ["HackathonVoterFactory"];

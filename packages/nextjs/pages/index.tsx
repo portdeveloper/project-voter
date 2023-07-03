@@ -9,17 +9,17 @@ import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 const Home: NextPage = () => {
   const [tab, setTab] = useState("ongoing");
 
-  let PVFAddress: any;
-  let PVFAbi: any;
+  let HVFAddress: any;
+  let HVFAbi: any;
 
-  const { data: deployedContractData } = useDeployedContractInfo("ProjectVoterFactory");
+  const { data: deployedContractData } = useDeployedContractInfo("HackathonVoterFactory");
   if (deployedContractData) {
-    ({ address: PVFAddress, abi: PVFAbi } = deployedContractData);
+    ({ address: HVFAddress, abi: HVFAbi } = deployedContractData);
   }
 
   const { data: hackathons, refetch } = useContractRead({
-    address: PVFAddress,
-    abi: PVFAbi,
+    address: HVFAddress,
+    abi: HVFAbi,
     functionName: "getHackathons",
   });
 
@@ -32,8 +32,8 @@ const Home: NextPage = () => {
   const { address } = useAccount();
 
   const { data: ownerAddress } = useContractRead({
-    address: PVFAddress,
-    abi: PVFAbi,
+    address: HVFAddress,
+    abi: HVFAbi,
     functionName: "owner",
   });
 
@@ -66,7 +66,7 @@ const Home: NextPage = () => {
           )}
         </div>
         {tab === "deploy" ? (
-          <DeployVoterForm PVFAddress={PVFAddress} PVFAbi={PVFAbi} />
+          <DeployVoterForm HVFAddress={HVFAddress} HVFAbi={HVFAbi} />
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             {hackathonsToDisplay?.map((hackathon: any) => {
