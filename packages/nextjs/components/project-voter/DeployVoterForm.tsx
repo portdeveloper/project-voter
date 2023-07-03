@@ -1,23 +1,16 @@
 import { useState } from "react";
 import { ethers } from "ethers";
-import type { NextPage } from "next";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
-// TODO: Add error handling
+interface DeployVoterFormProps {
+  PVFAddress: string;
+  PVFAbi: any[]; // replace with abi type ?
+}
 
-const DeployVoter: NextPage = () => {
+export const DeployVoterForm = ({ PVFAddress, PVFAbi }: DeployVoterFormProps) => {
   const [owner, setOwner] = useState("");
   const [votingPeriodInDays, setVotingPeriodInDays] = useState(0);
   const [hackathonName, setHackathonName] = useState("");
-
-  let PVFAddress: any;
-  let PVFAbi: any;
-
-  const { data: deployedContractData } = useDeployedContractInfo("ProjectVoterFactory");
-  if (deployedContractData) {
-    ({ address: PVFAddress, abi: PVFAbi } = deployedContractData);
-  }
 
   const { config } = usePrepareContractWrite({
     address: PVFAddress,
@@ -59,5 +52,3 @@ const DeployVoter: NextPage = () => {
     </div>
   );
 };
-
-export default DeployVoter;

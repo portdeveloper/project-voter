@@ -40,12 +40,6 @@ export const Header = () => {
         <NavLink href="/">Home</NavLink>
       </li>
       <li>
-        <NavLink href="/deploy-voter">
-          <BugAntIcon className="h-4 w-4" />
-          Deploy ProjectVoter
-        </NavLink>
-      </li>
-      <li>
         <NavLink href="/debug">
           <BugAntIcon className="h-4 w-4" />
           Debug Contracts
