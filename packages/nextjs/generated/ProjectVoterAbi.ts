@@ -21,6 +21,21 @@ export const abi = [
     type: "constructor",
   },
   {
+    inputs: [],
+    name: "AlreadyVoted",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidProjectID",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "Unauthorized",
+    type: "error",
+  },
+  {
     anonymous: false,
     inputs: [
       {

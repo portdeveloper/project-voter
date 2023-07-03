@@ -18,6 +18,10 @@ contract ProjectVoter {
 	uint public voteStart;
 	uint public voteEnd;
 
+	error Unauthorized();
+	error AlreadyVoted();
+	error InvalidProjectID();
+
 	event VoterAdded(address indexed voter);
 	event ProjectAdded(uint indexed projectId, string name, string url);
 	event VoteCast(address indexed voter, uint indexed projectId);
@@ -82,8 +86,9 @@ contract ProjectVoter {
 	}
 
 	function vote(uint _projectId) public onlyVoters inVotingPeriod {
-		require(_projectId < projects.length, "Invalid project ID");
-		require(!hasVoted[msg.sender], "You have already voted"); // Check if voter has already voted
+		if (_projectId >= projects.length) revert InvalidProjectID();
+		if (hasVoted[msg.sender]) revert AlreadyVoted();
+
 		hasVoted[msg.sender] = true; // Mark as voted
 		projects[_projectId].voteCount += 1;
 		emit VoteCast(msg.sender, _projectId);
