@@ -2,20 +2,29 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
-import { useContractEvent, useContractRead } from "wagmi";
-import { ProjectsManager, VoteButton, VotersManager } from "~~/components/project-voter/";
+import { useAccount, useContractEvent, useContractRead } from "wagmi";
+import { Leaderboard, ProjectsManager, VoteButton, VotersManager } from "~~/components/project-voter/";
 import { abi } from "~~/generated/ProjectVoterAbi";
 
 const HackathonPage: NextPage = () => {
   const router = useRouter();
   const { hackathon } = router.query;
-  const [activeTab, setActiveTab] = useState<"vote" | "add">("vote");
+  const [activeTab, setActiveTab] = useState<"vote" | "add" | "leaderboard">("vote");
   const [contractConfig, setContractConfig] = useState<{ address: string; abi: any } | null>(null);
+
+  const { address } = useAccount();
 
   const { data: hackathonProjects, refetch } = useContractRead({
     ...contractConfig,
     functionName: "getProjects",
   });
+
+  const { data: ownerAddress } = useContractRead({
+    ...contractConfig,
+    functionName: "owner",
+  });
+
+  const isOwner = address === ownerAddress;
 
   useContractEvent({
     ...contractConfig,
@@ -43,8 +52,13 @@ const HackathonPage: NextPage = () => {
             <li onClick={() => setActiveTab("vote")}>
               <a className={activeTab === "vote" ? "active" : ""}>Vote for Projects</a>
             </li>
-            <li onClick={() => setActiveTab("add")}>
-              <a className={activeTab === "add" ? "active" : ""}>Add Voters/Projects</a>
+            {isOwner && ( // Only show this tab if the connected wallet is the owner
+              <li onClick={() => setActiveTab("add")}>
+                <a className={activeTab === "add" ? "active" : ""}>Add Voters/Projects</a>
+              </li>
+            )}
+            <li onClick={() => setActiveTab("leaderboard")}>
+              <a className={activeTab === "leaderboard" ? "active" : ""}>Leaderboard</a>
             </li>
           </ul>
         </div>
@@ -54,19 +68,19 @@ const HackathonPage: NextPage = () => {
             <table className="table table-zebra  w-full max-w-screen-xl shadow-lg">
               <thead>
                 <tr>
-                  <th className="bg-primary">Project Name</th>
-                  <th className="bg-primary">Project URL</th>
-                  <th className="bg-primary">Vote Count</th>
-                  <th className="bg-primary text-end">Vote</th>
+                  <th className="w-3/6 bg-primary">Project Name</th>
+                  <th className="w-2/6 bg-primary">Project URL</th>
+                  <th className="w-1/6 bg-primary">Vote Count</th>
+                  <th className="w-1/6 bg-primary text-end">Vote</th>
                 </tr>
               </thead>
               <tbody>
                 {hackathonProjects?.map((project: any, index) => (
                   <tr key={index}>
-                    <td>{project.name}</td>
-                    <td>{project.url}</td>
-                    <td>{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
-                    <td className="text-right">
+                    <td className="w-2/6">{project.name}</td>
+                    <td className="w-2/6">{project.url}</td>
+                    <td className="w-1/6">{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
+                    <td className="w-1/6 text-right">
                       <VoteButton index={index} contractConfig={contractConfig} />
                     </td>
                   </tr>
@@ -74,7 +88,7 @@ const HackathonPage: NextPage = () => {
               </tbody>
             </table>
           </div>
-        ) : typeof hackathon === "string" ? (
+        ) : activeTab === "add" ? (
           <div className="w-full px-10 flex gap-10">
             <div className="w-1/2">
               <ProjectsManager contractConfig={contractConfig} />
@@ -83,6 +97,8 @@ const HackathonPage: NextPage = () => {
               <VotersManager contractConfig={contractConfig} />
             </div>
           </div>
+        ) : activeTab === "leaderboard" ? (
+          <Leaderboard contractConfig={contractConfig} />
         ) : (
           <div className="rounded-lg bg-red-500 p-4 text-white">Error: Invalid hackathon address</div>
         )}
