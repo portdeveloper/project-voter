@@ -1,40 +1,18 @@
-import { useEffect } from "react";
 import { ethers } from "ethers";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite } from "wagmi";
 import { notification } from "~~/utils/scaffold-eth";
 
 export const VoteButton = ({ index, contractConfig }: { index: number; contractConfig: any }) => {
-  const { config } = usePrepareContractWrite({
+  const { write } = useContractWrite({
     ...contractConfig,
     functionName: "vote",
+    mode: "recklesslyUnprepared",
     args: [ethers.BigNumber.from(index)],
+    onError: error => {
+      const simplifiedMessage = simplifyErrorMessage(error.message);
+      notification.error(simplifiedMessage);
+    },
   });
-
-  const { write, error } = useContractWrite(config as any);
-
-  useEffect(() => {
-    if (error && error.message) {
-      const errorMsg = error.message;
-      const customErrorStart = "reverted with custom error '";
-      const customErrorEndIndex = errorMsg.indexOf(customErrorStart);
-
-      if (customErrorEndIndex !== -1) {
-        const start = customErrorEndIndex + customErrorStart.length;
-        const end = errorMsg.indexOf("'", start);
-        const customError = errorMsg.slice(start, end);
-
-        switch (customError) {
-          case "AlreadyVoted()":
-            notification.error(<p>You have already voted!</p>);
-            break;
-          // Add cases for other custom errors here
-          default:
-            // Handle unknown custom errors
-            notification.error(<p>Unknown error: {customError}</p>);
-        }
-      }
-    }
-  }, [error]);
 
   return (
     <button
@@ -47,3 +25,20 @@ export const VoteButton = ({ index, contractConfig }: { index: number; contractC
     </button>
   );
 };
+
+// try to find the error string in the message and return it while keeping it readable
+function simplifyErrorMessage(message: string): string {
+  const startPhrase = "reverted with reason string '";
+  const start = message.indexOf(startPhrase);
+  if (start !== -1) {
+    const end = message.indexOf("'", start + startPhrase.length);
+    if (end !== -1) return message.slice(start + startPhrase.length, end); // Return only the reason string
+  }
+
+  const lowBalancePhrase = "sender doesn't have enough funds to send tx";
+  if (message.includes(lowBalancePhrase)) {
+    return "You don't have enough funds to perform this transaction.";
+  }
+
+  return message; // If we can't simplify the error message, return the original message
+}
