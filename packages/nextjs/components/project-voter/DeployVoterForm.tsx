@@ -40,7 +40,9 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
     }
   }, [data]);
 
-  const handleSubmitData = () => {
+  const handleSubmitData = (event: any) => {
+    event.preventDefault(); // This will prevent the form submission from causing a page refresh
+
     if (owner && votingPeriodInDays.trim() !== "" && hackathonName) {
       setPreparedData({ owner, votingPeriodInDays: Number(votingPeriodInDays), hackathonName });
     } else {
@@ -59,7 +61,6 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
 
   const handleDeletePreparedData = () => {
     setPreparedData(null);
-    // clear the input fields
     setOwner("");
     setVotingPeriodInDays("");
     setHackathonName("");
@@ -70,52 +71,57 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
   };
 
   return (
-    <div className="p-6 rounded-md shadow-sm bg-secondary w-full">
-      <input
-        type="text"
-        placeholder="Owner address"
-        onChange={e => setOwner(e.target.value)}
-        value={owner}
-        className="input w-full mb-4 shadow-md"
-      />
-      <input
-        type="number"
-        placeholder="Voting period in days"
-        onChange={e => setVotingPeriodInDays(e.target.value)}
-        value={votingPeriodInDays}
-        className="input w-full mb-4 shadow-md"
-      />
-      <input
-        type="text"
-        placeholder="Hackathon name"
-        onChange={e => setHackathonName(e.target.value)}
-        value={hackathonName}
-        className="input w-full mb-4 shadow-md"
-      />
-      <button onClick={handleSubmitData} className="btn btn-primary w-full">
-        Prepare Data
-      </button>
+    <div className="p-4 rounded-md w-full">
+      <form className="flex-col space-y-5 w-1/2">
+        <input
+          type="text"
+          placeholder="Owner address"
+          onChange={e => setOwner(e.target.value)}
+          value={owner}
+          className="form-input w-full rounded-md px-4 py-2 shadow-md"
+        />
+        <input
+          type="number"
+          placeholder="Voting period in days"
+          onChange={e => setVotingPeriodInDays(e.target.value)}
+          value={votingPeriodInDays}
+          className="form-input w-full rounded-md px-4 py-2 shadow-md"
+        />
+        <input
+          type="text"
+          placeholder="Hackathon name"
+          onChange={e => setHackathonName(e.target.value)}
+          value={hackathonName}
+          className="form-input w-full rounded-md px-4 py-2 shadow-md"
+        />
+        <button onClick={handleSubmitData} className="btn btn-primary">
+          Prepare Data
+        </button>
+      </form>
       {preparedData && (
-        <div className="mt-4">
-          <h3 className="text-lg font-bold mb-2 text-primary-content">Prepared Data:</h3>
-          <p>Owner: {preparedData.owner}</p>
-          <p>Voting Period: {preparedData.votingPeriodInDays} days</p>
-          <p>Hackathon Name: {preparedData.hackathonName}</p>
-          <div className="flex items-center space-x-2 mt-2">
-            <button onClick={handleEditPreparedData} className="btn btn-xs btn-outline btn-primary">
-              Edit
-            </button>
-            <button onClick={handleDeletePreparedData} className="btn btn-xs btn-outline btn-error">
-              Delete
-            </button>
+        <>
+          <h3 className="text-lg font-bold my-3">Prepared Data:</h3>
+          <div className="card shadow-md w-2/5">
+            <div className="card-body bg-primary">
+              <h2 className="card-title ">Hackathon Name: {preparedData.hackathonName}</h2>
+              <p className="m-0 p-0">Voting Period: {preparedData.votingPeriodInDays} days</p>
+              <p className="m-0 p-0">Owner: {preparedData.owner}</p>
+              <div className="card-actions mt-2">
+                <button onClick={handleEditPreparedData} className="btn btn-xs btn-secondary">
+                  Edit
+                </button>
+                <button onClick={handleDeletePreparedData} className="btn btn-xs btn-error">
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
-          <button onClick={handleDeploy} className="btn btn-primary w-full mt-4">
+          <button onClick={handleDeploy} className="btn btn-primary mt-4">
             Deploy Contract
           </button>
-        </div>
+        </>
       )}
-      <hr className="my-4 border-t-2 border-gray-300" />
-      <div>{data && "HackathonVoter deployed! Tx hash: " + data.hash}</div>
+      <div className="mt-5">{data && "HackathonVoter deployed! Tx hash: " + data.hash}</div>
     </div>
   );
 };

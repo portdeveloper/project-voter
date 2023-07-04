@@ -68,22 +68,22 @@ const Home: NextPage = () => {
         {tab === "deploy" ? (
           <DeployVoterForm HVFAddress={HVFAddress} HVFAbi={HVFAbi} />
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div>
             {hackathonsToDisplay && hackathonsToDisplay.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 p-5">
                 {hackathonsToDisplay.map((hackathon: any) => {
                   const startTime = new Date(parseInt(hackathon.startTime._hex, 16) * 1000).toLocaleDateString();
                   const endTime = new Date(parseInt(hackathon.endTime._hex, 16) * 1000).toLocaleDateString();
 
                   return (
-                    <div key={hackathon.name} className="card m-2 shadow-sm">
-                      <div className="card-body bg-base-300">
+                    <div key={hackathon.name} className="card m-2 shadow-md">
+                      <div className="card-body bg-primary">
                         <h2 className="card-title">{hackathon.name}</h2>
                         <p className="m-0 p-0">Start time: {startTime}</p>
                         <p className="m-0 p-0">End time: {endTime}</p>
                         <div className="card-actions mt-2 justify-end">
                           <Link href={`/hackathons/${encodeURIComponent(hackathon.hackathonVoterAddress)}`}>
-                            <button className="btn btn-primary">Vote</button>
+                            <button className="btn btn-secondary">Vote</button>
                           </Link>
                         </div>
                       </div>
