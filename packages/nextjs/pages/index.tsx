@@ -51,7 +51,7 @@ const Home: NextPage = () => {
   return (
     <>
       <MetaHeader />
-      <div className="mx-auto mt-10 w-full max-w-6xl space-y-2 rounded-lg bg-white p-4 shadow">
+      <div className="mx-auto mt-10 w-full max-w-6xl space-y-2 rounded-lg p-4 bg-secondary shadow">
         <div className="tabs">
           <button className={`tab ${tab === "ongoing" ? "tab-active" : ""}`} onClick={() => setTab("ongoing")}>
             Ongoing Hackathons
@@ -61,7 +61,7 @@ const Home: NextPage = () => {
           </button>
           {isOwner && (
             <button className={`tab ${tab === "deploy" ? "tab-active" : ""}`} onClick={() => setTab("deploy")}>
-              Deploy ProjectVoter
+              Deploy HackathonVoter
             </button>
           )}
         </div>
@@ -69,25 +69,31 @@ const Home: NextPage = () => {
           <DeployVoterForm HVFAddress={HVFAddress} HVFAbi={HVFAbi} />
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {hackathonsToDisplay?.map((hackathon: any) => {
-              const startTime = new Date(parseInt(hackathon.startTime._hex, 16) * 1000).toLocaleDateString();
-              const endTime = new Date(parseInt(hackathon.endTime._hex, 16) * 1000).toLocaleDateString();
+            {hackathonsToDisplay && hackathonsToDisplay.length > 0 ? (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {hackathonsToDisplay.map((hackathon: any) => {
+                  const startTime = new Date(parseInt(hackathon.startTime._hex, 16) * 1000).toLocaleDateString();
+                  const endTime = new Date(parseInt(hackathon.endTime._hex, 16) * 1000).toLocaleDateString();
 
-              return (
-                <div key={hackathon.name} className="card m-2 shadow-sm">
-                  <div className="card-body bg-base-300">
-                    <h2 className="card-title">{hackathon.name}</h2>
-                    <p className="m-0 p-0">Start time: {startTime}</p>
-                    <p className="m-0 p-0">End time: {endTime}</p>
-                    <div className="card-actions mt-2 justify-end">
-                      <Link href={`/hackathons/${encodeURIComponent(hackathon.projectVoterAddress)}`}>
-                        <button className="btn btn-primary">Vote</button>
-                      </Link>
+                  return (
+                    <div key={hackathon.name} className="card m-2 shadow-sm">
+                      <div className="card-body bg-base-300">
+                        <h2 className="card-title">{hackathon.name}</h2>
+                        <p className="m-0 p-0">Start time: {startTime}</p>
+                        <p className="m-0 p-0">End time: {endTime}</p>
+                        <div className="card-actions mt-2 justify-end">
+                          <Link href={`/hackathons/${encodeURIComponent(hackathon.hackathonVoterAddress)}`}>
+                            <button className="btn btn-primary">Vote</button>
+                          </Link>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="p-4">No hackathons available at the moment.</div>
+            )}
           </div>
         )}
       </div>

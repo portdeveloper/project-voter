@@ -25,7 +25,7 @@ const deployHackathonVoterFactory: DeployFunction = async function (hre: Hardhat
     from: deployer,
     // Contract constructor arguments
     log: true,
-    args: ["0x3D8F33965A152F8Cad7A236485ED05ea288e0698"],
+    args: ["0x790F409A85389a3ac1A7C81B064D01970d3FdD6f"],
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
