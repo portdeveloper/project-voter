@@ -162,6 +162,39 @@ const getParsedEthersError = (e: any): string => {
 };
 
 /**
+ * @dev utility function to parse error thrown by wagmi
+ * @param e - wagmi error object
+ * @returns {string} parsed error string
+ */
+const getParsedWagmiError = (e: any): string => {
+  let message = e;
+
+  // Check if the error has a `data.message` property and extract it
+  const dataMessage = e.data?.message;
+  if (dataMessage) {
+    message = dataMessage;
+  }
+
+  // Extract the 'reverted with reason string' error if it exists
+  const insufficientFundsMatch = message.match(/sender doesn't have enough funds to send tx/);
+  const revertReasonMatch = message.match(/reverted with reason string '([^']+)'/);
+  const customErrorMatch = message.match(/reverted with custom error '([^']+)'/);
+
+  if (revertReasonMatch && revertReasonMatch[1]) {
+    // Use the extracted reason for the error message
+    message = revertReasonMatch[1];
+  } else if (insufficientFundsMatch) {
+    message = "You don't have enough funds to perform this transaction.";
+  } else if (customErrorMatch && customErrorMatch[1]) {
+    message = customErrorMatch[1];
+  }
+
+  console.log("New message", message);
+
+  return message;
+};
+
+/**
  * @dev Parse form input with array support
  * @param {Record<string,any>} form - form object containing key value pairs
  * @returns  parsed error string
@@ -199,4 +232,5 @@ export {
   getFunctionInputKey,
   getParsedContractFunctionArgs,
   getParsedEthersError,
+  getParsedWagmiError,
 };
