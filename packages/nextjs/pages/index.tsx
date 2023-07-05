@@ -40,10 +40,10 @@ const Home: NextPage = () => {
   const isOwner = address === ownerAddress;
 
   const ongoingHackathons = hackathons?.filter(
-    (hackathon: any) => new Date() < new Date(parseInt(hackathon.endTime._hex, 16) * 1000),
+    (hackathon: any) => new Date() < new Date(Number(hackathon.endTime) * 1000),
   );
   const pastHackathons = hackathons?.filter(
-    (hackathon: any) => new Date() > new Date(parseInt(hackathon.endTime._hex, 16) * 1000),
+    (hackathon: any) => new Date() > new Date(Number(hackathon.endTime) * 1000),
   );
 
   const hackathonsToDisplay = tab === "ongoing" ? ongoingHackathons : pastHackathons;
@@ -72,8 +72,8 @@ const Home: NextPage = () => {
             {hackathonsToDisplay && hackathonsToDisplay.length > 0 ? (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 p-5">
                 {hackathonsToDisplay.map((hackathon: any) => {
-                  const startTime = new Date(parseInt(hackathon.startTime._hex, 16) * 1000).toLocaleDateString();
-                  const endTime = new Date(parseInt(hackathon.endTime._hex, 16) * 1000).toLocaleDateString();
+                  const startTime = new Date(Number(hackathon.startTime) * 1000).toLocaleDateString();
+                  const endTime = new Date(Number(hackathon.endTime) * 1000).toLocaleDateString();
 
                   return (
                     <div key={hackathon.name} className="card m-2 shadow-md">

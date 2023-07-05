@@ -78,7 +78,7 @@ const HackathonPage: NextPage = () => {
                   <tr key={index}>
                     <td className="w-2/6">{project.name}</td>
                     <td className="w-2/6">{project.url}</td>
-                    <td className="w-1/6">{BigInt(project.voteCount._hex).toString()}</td>
+                    <td className="w-1/6">{BigInt(project.voteCount).toString()}</td>
                     <td className="w-1/6 text-right">
                       <VoteButton index={index} contractConfig={contractConfig} />
                     </td>

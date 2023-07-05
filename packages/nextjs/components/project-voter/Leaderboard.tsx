@@ -18,7 +18,7 @@ export const Leaderboard = ({ contractConfig }: { contractConfig: { address: str
         (
           a: any,
           b: any, // Copy the array before sorting
-        ) => (BigInt(a.voteCount._hex) < BigInt(b.voteCount._hex) ? 1 : -1),
+        ) => (BigInt(a.voteCount) < BigInt(b.voteCount) ? 1 : -1),
       );
       setProjects(sortedProjects); // setProjects is the setter function from useState
     }
@@ -41,7 +41,7 @@ export const Leaderboard = ({ contractConfig }: { contractConfig: { address: str
               <td>{index + 1}</td>
               <td>{project.name}</td>
               <td>{project.url}</td>
-              <td>{BigInt(project.voteCount._hex).toString()}</td>
+              <td>{BigInt(project.voteCount).toString()}</td>
             </tr>
           ))}
         </tbody>
