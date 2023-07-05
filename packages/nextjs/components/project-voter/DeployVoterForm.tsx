@@ -9,6 +9,10 @@ interface DeployVoterFormProps {
   HVFAbi: any[];
 }
 
+// @todo the owner should be able to set the start and end date of the hackathon
+// @todo anyone should be able to create a hackathonVoter contract?
+//// but then how would the UI work? perhaps different orgs could fork and hardcode the factory address?
+
 export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) => {
   const [owner, setOwner] = useState("");
   const [votingPeriodInDays, setVotingPeriodInDays] = useState("");
@@ -121,7 +125,23 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
           </button>
         </>
       )}
-      <div className="mt-5">{data && "HackathonVoter deployed! Tx hash: " + data.hash}</div>
+      <div className="mt-5">
+        <div>
+          {data && (
+            <>
+              <div>HackathonVoter deployed! Tx hash: {data.hash}</div>
+              <a
+                href={`https://etherscan.io/tx/${data.hash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-blue-600"
+              >
+                View on Etherscan
+              </a>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
