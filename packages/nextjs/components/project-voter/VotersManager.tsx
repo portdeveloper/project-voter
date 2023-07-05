@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AddVoterForm } from "./AddVoterForm";
 import { VotersList } from "./VotersList";
 import { useContractEvent, useContractRead, useContractWrite } from "wagmi";
+import { getParsedError } from "~~/components/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 
 export const VotersManager = ({ contractConfig }: { contractConfig: { address: string; abi: any } | null }) => {
   const [newVoter, setNewVoter] = useState<string>("");
@@ -71,6 +73,10 @@ export const VotersManager = ({ contractConfig }: { contractConfig: { address: s
     ...contractConfig,
     functionName: "addVoters",
     args: [newVoters],
+    onError: (error: Error) => {
+      const simplifiedMessage = getParsedError(error.message);
+      notification.error(simplifiedMessage);
+    },
   });
 
   return (

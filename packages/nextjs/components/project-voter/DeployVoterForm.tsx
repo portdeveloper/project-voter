@@ -29,7 +29,7 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
     functionName: "createHackathonVoter",
     args: preparedData ? [preparedData.owner, BigInt(preparedData.votingPeriodInDays), preparedData.hackathonName] : [],
     onError: (error: Error) => {
-      const simplifiedMessage = getParsedError(error.message);
+      const simplifiedMessage = getParsedError(error);
       notification.error(simplifiedMessage);
     },
   });

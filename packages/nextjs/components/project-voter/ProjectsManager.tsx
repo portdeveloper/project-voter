@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AddProjectForm } from "./AddProjectForm";
 import { ProjectsList } from "./ProjectsList";
 import { useContractEvent, useContractRead, useContractWrite } from "wagmi";
+import { getParsedError } from "~~/components/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 
 type Project = { name: string; url: string };
 
@@ -72,7 +74,11 @@ export const ProjectsManager = ({ contractConfig }: { contractConfig: { address:
   const { write: addProjects } = useContractWrite({
     ...contractConfig,
     functionName: "addProjects",
-    args: [newProjects.map(p => p.name), newProjects.map(p => p.url)], // Use newProjects for args
+    args: [newProjects.map(p => p.name), newProjects.map(p => p.url)],
+    onError: (error: Error) => {
+      const simplifiedMessage = getParsedError(error);
+      notification.error(simplifiedMessage);
+    },
   });
 
   return (
