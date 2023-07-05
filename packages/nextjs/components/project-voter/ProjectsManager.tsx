@@ -22,8 +22,8 @@ export const ProjectsManager = ({ contractConfig }: { contractConfig: { address:
   useContractEvent({
     ...contractConfig,
     eventName: "ProjectAdded",
-    listener(name, url) {
-      console.log(`Project added: name: ${name} - url: ${url}`);
+    listener(log: any) {
+      console.log(log);
       refetchProjects();
     },
   });
@@ -71,7 +71,6 @@ export const ProjectsManager = ({ contractConfig }: { contractConfig: { address:
 
   const { write: addProjects } = useContractWrite({
     ...contractConfig,
-    mode: "recklesslyUnprepared",
     functionName: "addProjects",
     args: [newProjects.map(p => p.name), newProjects.map(p => p.url)], // Use newProjects for args
   });

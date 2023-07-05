@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 // Import useState
-import { ethers } from "ethers";
 import { useContractRead } from "wagmi";
 
 export const Leaderboard = ({ contractConfig }: { contractConfig: { address: string; abi: any } | null }) => {
@@ -19,7 +18,7 @@ export const Leaderboard = ({ contractConfig }: { contractConfig: { address: str
         (
           a: any,
           b: any, // Copy the array before sorting
-        ) => (ethers.BigNumber.from(a.voteCount._hex).lt(ethers.BigNumber.from(b.voteCount._hex)) ? 1 : -1),
+        ) => (BigInt(a.voteCount._hex) < BigInt(b.voteCount._hex) ? 1 : -1),
       );
       setProjects(sortedProjects); // setProjects is the setter function from useState
     }
@@ -42,7 +41,7 @@ export const Leaderboard = ({ contractConfig }: { contractConfig: { address: str
               <td>{index + 1}</td>
               <td>{project.name}</td>
               <td>{project.url}</td>
-              <td>{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
+              <td>{BigInt(project.voteCount._hex).toString()}</td>
             </tr>
           ))}
         </tbody>

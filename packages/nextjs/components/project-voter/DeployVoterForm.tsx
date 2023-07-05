@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
 import { useContractWrite } from "wagmi";
-import { getParsedWagmiError } from "~~/components/scaffold-eth";
+import { getParsedError } from "~~/components/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 interface DeployVoterFormProps {
@@ -28,12 +27,9 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
     address: HVFAddress,
     abi: HVFAbi,
     functionName: "createHackathonVoter",
-    args: preparedData
-      ? [preparedData.owner, ethers.BigNumber.from(preparedData.votingPeriodInDays), preparedData.hackathonName]
-      : [],
-    mode: "recklesslyUnprepared",
-    onError: error => {
-      const simplifiedMessage = getParsedWagmiError(error.message);
+    args: preparedData ? [preparedData.owner, BigInt(preparedData.votingPeriodInDays), preparedData.hackathonName] : [],
+    onError: (error: Error) => {
+      const simplifiedMessage = getParsedError(error.message);
       notification.error(simplifiedMessage);
     },
   });

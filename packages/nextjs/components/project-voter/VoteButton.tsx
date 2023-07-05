@@ -1,6 +1,5 @@
-import { ethers } from "ethers";
 import { useContractWrite } from "wagmi";
-import { getParsedWagmiError } from "~~/components/scaffold-eth";
+import { getParsedError } from "~~/components/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 export const VoteButton = ({ index, contractConfig }: { index: number; contractConfig: any }) => {
@@ -8,9 +7,9 @@ export const VoteButton = ({ index, contractConfig }: { index: number; contractC
     ...contractConfig,
     functionName: "vote",
     mode: "recklesslyUnprepared",
-    args: [ethers.BigNumber.from(index)],
-    onError: error => {
-      const simplifiedMessage = getParsedWagmiError(error.message);
+    args: [BigInt(index)],
+    onError: (error: Error) => {
+      const simplifiedMessage = getParsedError(error.message);
       notification.error(simplifiedMessage);
     },
   });

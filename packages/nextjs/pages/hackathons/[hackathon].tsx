@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { useAccount, useContractEvent, useContractRead } from "wagmi";
 import { Leaderboard, ProjectsManager, VoteButton, VotersManager } from "~~/components/project-voter/";
@@ -29,8 +28,8 @@ const HackathonPage: NextPage = () => {
   useContractEvent({
     ...contractConfig,
     eventName: "VoteCast",
-    listener(voter, projectId) {
-      console.log(`Voted! name: ${voter} - url: ${projectId}`);
+    listener(log: any) {
+      console.log(log);
       refetch();
     },
   });
@@ -75,11 +74,11 @@ const HackathonPage: NextPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {hackathonProjects?.map((project: any, index) => (
+                {hackathonProjects?.map((project: any, index: number) => (
                   <tr key={index}>
                     <td className="w-2/6">{project.name}</td>
                     <td className="w-2/6">{project.url}</td>
-                    <td className="w-1/6">{ethers.BigNumber.from(project.voteCount._hex).toString()}</td>
+                    <td className="w-1/6">{BigInt(project.voteCount._hex).toString()}</td>
                     <td className="w-1/6 text-right">
                       <VoteButton index={index} contractConfig={contractConfig} />
                     </td>

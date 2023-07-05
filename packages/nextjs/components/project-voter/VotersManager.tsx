@@ -20,8 +20,8 @@ export const VotersManager = ({ contractConfig }: { contractConfig: { address: s
   useContractEvent({
     ...contractConfig,
     eventName: "VoterAdded",
-    listener(address) {
-      console.log(`Voter added: address: ${address}`);
+    listener(log: any) {
+      console.log(log);
       refetchVoters();
     },
   });
@@ -69,7 +69,6 @@ export const VotersManager = ({ contractConfig }: { contractConfig: { address: s
 
   const { write: addVoters } = useContractWrite({
     ...contractConfig,
-    mode: "recklesslyUnprepared",
     functionName: "addVoters",
     args: [newVoters],
   });
