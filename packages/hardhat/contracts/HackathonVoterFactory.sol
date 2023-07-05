@@ -11,6 +11,8 @@ contract HackathonVoterFactory {
 		uint endTime;
 	}
 	address public owner;
+	Hackathon[] public hackathons;
+	mapping(string => bool) public hackathonNames;
 
 	constructor(address _owner) {
 		owner = _owner;
@@ -21,8 +23,6 @@ contract HackathonVoterFactory {
 		_;
 	}
 
-	Hackathon[] public hackathons;
-
 	event HackathonVoterCreated(
 		address indexed owner,
 		address hackathonVoterAddress,
@@ -31,20 +31,27 @@ contract HackathonVoterFactory {
 
 	function createHackathonVoter(
 		address _owner,
-		uint _votingPeriodInDays,
+		uint _startTime,
+		uint _endTime,
 		string memory _hackathonName
 	) public onlyOwner {
+		require(_startTime < _endTime, "Start time must be before end time");
 		HackathonVoter newHackathonVoter = new HackathonVoter(
 			_owner,
-			_votingPeriodInDays,
+			_startTime,
+			_endTime,
 			_hackathonName
+		);
+		require(
+			hackathonNames[_hackathonName] == false,
+			"Hackathon name already exists"
 		);
 		hackathons.push(
 			Hackathon({
 				hackathonVoterAddress: address(newHackathonVoter),
 				name: _hackathonName,
-				startTime: block.timestamp,
-				endTime: block.timestamp + (_votingPeriodInDays * 1 days)
+				startTime: _startTime,
+				endTime: _endTime
 			})
 		);
 		emit HackathonVoterCreated(

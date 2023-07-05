@@ -13,14 +13,14 @@ export const AddProjectForm = ({ newProject, handleProjectChange, handleProjectS
       value={newProject.name}
       onChange={handleProjectChange}
       placeholder="Project name"
-      className="form-input w-1/2 rounded-md px-4 py-2 shadow-md"
+      className="form-input w-1/2 rounded-md px-4 py-2 shadow-md bg-base-100"
     />
     <input
       name="url"
       value={newProject.url}
       onChange={handleProjectChange}
       placeholder="Project URL"
-      className="form-input w-1/2 rounded-md px-4 py-2 shadow-md"
+      className="form-input w-1/2 rounded-md px-4 py-2 shadow-md bg-base-100"
     />
     <button className="btn btn-primary">Add Project</button>
   </form>

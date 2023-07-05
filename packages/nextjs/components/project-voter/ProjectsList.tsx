@@ -18,7 +18,7 @@ export const ProjectsList = ({ projects }: ProjectsListProps) => (
             <tr key={index}>
               <td className="py-2 text-sm text-primary-content">{project.name}</td>
               <td className="py-2 text-sm text-primary-content">
-                <a href={project.url} target="_blank" rel="noreferrer" className="text-accent underline">
+                <a href={project.url} target="_blank" rel="noreferrer" className="text-blue-700 underline">
                   {project.url}
                 </a>
               </td>

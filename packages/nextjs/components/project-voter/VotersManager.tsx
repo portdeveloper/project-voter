@@ -100,10 +100,10 @@ export const VotersManager = ({ contractConfig }: { contractConfig: { address: s
               <tr key={i}>
                 <td>{address}</td>
                 <td className="flex items-center space-x-2">
-                  <button className="btn btn-xs btn-outline btn-primary" onClick={() => handleVoterEdit(i)}>
+                  <button className="btn btn-xs btn-primary" onClick={() => handleVoterEdit(i)}>
                     Edit
                   </button>
-                  <button className="btn btn-xs btn-outline btn-error" onClick={() => handleVoterDelete(i)}>
+                  <button className="btn btn-xs btn-error" onClick={() => handleVoterDelete(i)}>
                     Delete
                   </button>
                 </td>

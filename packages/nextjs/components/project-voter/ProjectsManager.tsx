@@ -109,10 +109,10 @@ export const ProjectsManager = ({ contractConfig }: { contractConfig: { address:
                   <td>{project.name}</td>
                   <td>{project.url}</td>
                   <td className="flex items-center space-x-2">
-                    <button className="btn btn-xs btn-outline btn-primary" onClick={() => handleProjectEdit(i)}>
+                    <button className="btn btn-xs btn-primary" onClick={() => handleProjectEdit(i)}>
                       Edit
                     </button>
-                    <button className="btn btn-xs btn-outline btn-error" onClick={() => handleProjectDelete(i)}>
+                    <button className="btn btn-xs btn-error" onClick={() => handleProjectDelete(i)}>
                       Delete
                     </button>
                   </td>

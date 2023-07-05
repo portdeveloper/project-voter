@@ -77,7 +77,11 @@ const HackathonPage: NextPage = () => {
                 {hackathonProjects?.map((project: any, index: number) => (
                   <tr key={index}>
                     <td className="w-2/6">{project.name}</td>
-                    <td className="w-2/6">{project.url}</td>
+                    <td className="w-2/6">
+                      <a href={project.url} target="_blank" rel="noreferrer" className="text-blue-700 underline ">
+                        {project.url}
+                      </a>
+                    </td>
                     <td className="w-1/6">{BigInt(project.voteCount).toString()}</td>
                     <td className="w-1/6 text-right">
                       <VoteButton index={index} contractConfig={contractConfig} />

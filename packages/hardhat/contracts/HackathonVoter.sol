@@ -46,13 +46,14 @@ contract HackathonVoter {
 
 	constructor(
 		address _owner,
-		uint _votingPeriodInDays,
+		uint startTime,
+		uint endTime,
 		string memory _hackathonName
 	) {
 		owner = _owner;
 		hackathonName = _hackathonName;
-		voteStart = block.timestamp;
-		voteEnd = voteStart + (_votingPeriodInDays * 1 days);
+		voteStart = startTime;
+		voteEnd = endTime;
 	}
 
 	function addVoters(address[] calldata _voters) public onlyOwner {

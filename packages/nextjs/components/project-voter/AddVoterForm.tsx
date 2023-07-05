@@ -11,7 +11,7 @@ export const AddVoterForm = ({ newVoter, handleVoterChange, handleVoterSubmit }:
       value={newVoter}
       onChange={handleVoterChange}
       placeholder="Address"
-      className="form-input w-full rounded-md px-4 py-2 shadow-md"
+      className="form-input w-full rounded-md px-4 py-2 shadow-md bg-base-100"
     />
     <button className="btn btn-primary">Add Voter</button>
   </form>

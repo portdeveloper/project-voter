@@ -8,18 +8,20 @@ interface DeployVoterFormProps {
   HVFAbi: any[];
 }
 
-// @todo the owner should be able to set the start and end date of the hackathon
 // @todo anyone should be able to create a hackathonVoter contract?
 //// but then how would the UI work? perhaps different orgs could fork and hardcode the factory address?
 
 export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) => {
   const [owner, setOwner] = useState("");
-  const [votingPeriodInDays, setVotingPeriodInDays] = useState("");
+  const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000));
+  const [endTime, setEndTime] = useState(Math.floor((Date.now() + 7 * 24 * 60 * 60 * 1000) / 1000));
+
   const [hackathonName, setHackathonName] = useState("");
 
   const [preparedData, setPreparedData] = useState<{
     owner: string;
-    votingPeriodInDays: number;
+    startTime: number;
+    endTime: number;
     hackathonName: string;
   } | null>(null);
 
@@ -27,7 +29,9 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
     address: HVFAddress,
     abi: HVFAbi,
     functionName: "createHackathonVoter",
-    args: preparedData ? [preparedData.owner, BigInt(preparedData.votingPeriodInDays), preparedData.hackathonName] : [],
+    args: preparedData
+      ? [preparedData.owner, BigInt(preparedData.startTime), BigInt(preparedData.endTime), preparedData.hackathonName]
+      : [],
     onError: (error: Error) => {
       const simplifiedMessage = getParsedError(error);
       notification.error(simplifiedMessage);
@@ -43,8 +47,13 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
   const handleSubmitData = (event: any) => {
     event.preventDefault(); // This will prevent the form submission from causing a page refresh
 
-    if (owner && votingPeriodInDays.trim() !== "" && hackathonName) {
-      setPreparedData({ owner, votingPeriodInDays: Number(votingPeriodInDays), hackathonName });
+    if (owner && hackathonName) {
+      setPreparedData({
+        owner,
+        startTime: Number(startTime),
+        endTime: Number(endTime),
+        hackathonName,
+      });
     } else {
       alert("Please fill all fields correctly");
     }
@@ -53,7 +62,8 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
   const handleEditPreparedData = () => {
     if (preparedData) {
       setOwner(preparedData.owner);
-      setVotingPeriodInDays(String(preparedData.votingPeriodInDays));
+      setStartTime(preparedData.startTime);
+      setEndTime(preparedData.endTime);
       setHackathonName(preparedData.hackathonName);
       setPreparedData(null);
     }
@@ -62,7 +72,8 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
   const handleDeletePreparedData = () => {
     setPreparedData(null);
     setOwner("");
-    setVotingPeriodInDays("");
+    setStartTime(0);
+    setEndTime(0);
     setHackathonName("");
   };
 
@@ -78,21 +89,29 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
           placeholder="Owner address"
           onChange={e => setOwner(e.target.value)}
           value={owner}
-          className="form-input w-full rounded-md px-4 py-2 shadow-md"
+          className="form-input w-full rounded-md px-4 py-2 shadow-md bg-primary"
         />
         <input
-          type="number"
-          placeholder="Voting period in days"
-          onChange={e => setVotingPeriodInDays(e.target.value)}
-          value={votingPeriodInDays}
-          className="form-input w-full rounded-md px-4 py-2 shadow-md"
+          type="datetime-local"
+          placeholder="Start time"
+          onChange={e => setStartTime(new Date(e.target.value).getTime() / 1000)}
+          value={new Date(startTime * 1000).toISOString().substring(0, 16)}
+          className="form-input w-full bg-primary rounded-md px-4 py-2 shadow-md"
         />
+        <input
+          type="datetime-local"
+          placeholder="End time"
+          onChange={e => setEndTime(new Date(e.target.value).getTime() / 1000)}
+          value={new Date(endTime * 1000).toISOString().substring(0, 16)}
+          className="form-input w-full rounded-md px-4 py-2 shadow-md bg-primary"
+        />
+
         <input
           type="text"
           placeholder="Hackathon name"
           onChange={e => setHackathonName(e.target.value)}
           value={hackathonName}
-          className="form-input w-full rounded-md px-4 py-2 shadow-md"
+          className="form-input w-full rounded-md px-4 py-2 shadow-md bg-primary"
         />
         <button onClick={handleSubmitData} className="btn btn-primary">
           Prepare Data
@@ -104,7 +123,18 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
           <div className="card shadow-md w-2/5">
             <div className="card-body bg-primary">
               <h2 className="card-title ">Hackathon Name: {preparedData.hackathonName}</h2>
-              <p className="m-0 p-0">Voting Period: {preparedData.votingPeriodInDays} days</p>
+              <p className="m-0 p-0">
+                Start time:{" "}
+                {new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short" }).format(
+                  new Date(preparedData.startTime * 1000),
+                )}
+              </p>
+              <p className="m-0 p-0">
+                End time:{" "}
+                {new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeStyle: "short" }).format(
+                  new Date(preparedData.endTime * 1000),
+                )}
+              </p>
               <p className="m-0 p-0">Owner: {preparedData.owner}</p>
               <div className="card-actions mt-2">
                 <button onClick={handleEditPreparedData} className="btn btn-xs btn-secondary">
@@ -121,6 +151,7 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
           </button>
         </>
       )}
+
       <div className="mt-5">
         <div>
           {data && (
