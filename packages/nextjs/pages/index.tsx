@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { useAccount, useContractRead } from "wagmi";
+import { useAccount, useContractEvent, useContractRead } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { DeployVoterForm } from "~~/components/project-voter/";
+import { RemoveHackathonButton } from "~~/components/project-voter/RemoveHackathonButton";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 // @todo links look bad in dark theme
@@ -30,6 +31,16 @@ const Home: NextPage = () => {
       refetch();
     }
   }, [tab]);
+
+  useContractEvent({
+    address: HVFAddress,
+    abi: HVFAbi,
+    eventName: "hackathonRemoved",
+    listener(log: any) {
+      console.log(log);
+      refetch();
+    },
+  });
 
   const { address } = useAccount();
 
@@ -73,7 +84,7 @@ const Home: NextPage = () => {
           <div>
             {hackathonsToDisplay && hackathonsToDisplay.length > 0 ? (
               <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 md:grid-cols-3">
-                {hackathonsToDisplay.map((hackathon: any) => {
+                {hackathonsToDisplay.map((hackathon: any, index) => {
                   const startTime = new Date(Number(hackathon.startTime) * 1000).toLocaleDateString();
                   const endTime = new Date(Number(hackathon.endTime) * 1000).toLocaleDateString();
 
@@ -83,7 +94,13 @@ const Home: NextPage = () => {
                         <h2 className="card-title">{hackathon.name}</h2>
                         <p className="m-0 p-0">Start time: {startTime}</p>
                         <p className="m-0 p-0">End time: {endTime}</p>
-                        <div className="card-actions mt-2 justify-end">
+                        <div className="card-actions mt-2 justify-end items-center">
+                          {isOwner && (
+                            <RemoveHackathonButton
+                              index={index}
+                              contractConfig={{ address: HVFAddress, abi: HVFAbi }}
+                            />
+                          )}
                           <Link href={`/hackathons/${encodeURIComponent(hackathon.hackathonVoterAddress)}`}>
                             <button className="btn btn-secondary">Vote</button>
                           </Link>
