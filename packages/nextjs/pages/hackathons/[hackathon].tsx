@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import { useAccount, useContractEvent, useContractRead } from "wagmi";
+import { LinkIcon } from "@heroicons/react/24/outline";
 import {
   Leaderboard,
   ProjectsManager,
@@ -96,7 +97,8 @@ const HackathonPage: NextPage = () => {
                   <tr key={index}>
                     <td className="w-2/6">{project.name}</td>
                     <td className="w-2/6">
-                      <a href={project.url} target="_blank" rel="noreferrer" className="text-blue-700 underline ">
+                      <a href={project.url} target="_blank" rel="noreferrer" className="underline flex items-center">
+                        <LinkIcon className="h-5 w-5 cursor-pointer" aria-hidden="true" />
                         {project.url}
                       </a>
                     </td>

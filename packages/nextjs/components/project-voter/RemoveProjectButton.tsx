@@ -13,13 +13,14 @@ export const RemoveProjectButton = ({ index, contractConfig }: { index: number; 
     },
   });
 
+  const handleRemove = () => {
+    if (window.confirm("Are you sure you want to remove this project?")) {
+      write?.();
+    }
+  };
+
   return (
-    <button
-      onClick={() => {
-        write?.();
-      }}
-      className="btn btn-sm btn-error"
-    >
+    <button onClick={handleRemove} className="btn btn-sm btn-error">
       Remove Project
     </button>
   );
