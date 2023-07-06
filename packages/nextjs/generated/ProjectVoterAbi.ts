@@ -8,7 +8,12 @@ export const abi = [
       },
       {
         internalType: "uint256",
-        name: "_votingPeriodInDays",
+        name: "startTime",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "endTime",
         type: "uint256",
       },
       {
@@ -58,6 +63,19 @@ export const abi = [
       },
     ],
     name: "ProjectAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "projectId",
+        type: "uint256",
+      },
+    ],
+    name: "ProjectRemoved",
     type: "event",
   },
   {
@@ -150,7 +168,7 @@ export const abi = [
             type: "uint256",
           },
         ],
-        internalType: "struct ProjectVoter.Project[]",
+        internalType: "struct HackathonVoter.Project[]",
         name: "",
         type: "tuple[]",
       },
@@ -258,6 +276,19 @@ export const abi = [
         type: "uint256",
       },
     ],
+    name: "removeProject",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_projectId",
+        type: "uint256",
+      },
+    ],
     name: "vote",
     outputs: [],
     stateMutability: "nonpayable",
@@ -279,6 +310,25 @@ export const abi = [
   {
     inputs: [],
     name: "voteStart",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "votedProject",
     outputs: [
       {
         internalType: "uint256",

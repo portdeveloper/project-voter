@@ -12,7 +12,8 @@ contract HackathonVoter {
 	string public hackathonName;
 	address public owner;
 	mapping(address => bool) public voters;
-	mapping(address => bool) public hasVoted; // Added line
+	mapping(address => bool) public hasVoted;
+	mapping(address => uint) public votedProject;
 	address[] public voterAddresses;
 	Project[] public projects;
 	uint public voteStart;
@@ -25,6 +26,7 @@ contract HackathonVoter {
 	event VoterAdded(address indexed voter);
 	event ProjectAdded(uint indexed projectId, string name, string url);
 	event VoteCast(address indexed voter, uint indexed projectId);
+	event ProjectRemoved(uint indexed projectId);
 
 	modifier onlyOwner() {
 		require(msg.sender == owner, "Only the owner can perform this action");
@@ -88,11 +90,27 @@ contract HackathonVoter {
 
 	function vote(uint _projectId) public onlyVoters inVotingPeriod {
 		if (_projectId >= projects.length) revert InvalidProjectID();
-		if (hasVoted[msg.sender]) revert AlreadyVoted();
 
-		hasVoted[msg.sender] = true; // Mark as voted
+		if (hasVoted[msg.sender]) {
+			projects[votedProject[msg.sender]].voteCount -= 1;
+		} else {
+			hasVoted[msg.sender] = true;
+		}
+
+		votedProject[msg.sender] = _projectId;
 		projects[_projectId].voteCount += 1;
+
 		emit VoteCast(msg.sender, _projectId);
+	}
+
+	function removeProject(uint _projectId) public onlyOwner {
+		require(_projectId < projects.length, "Invalid project id");
+
+		if (_projectId < projects.length - 1) {
+			projects[_projectId] = projects[projects.length - 1];
+		}
+
+		emit ProjectRemoved(_projectId);
 	}
 
 	function getProjects() public view returns (Project[] memory) {
