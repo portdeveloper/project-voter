@@ -25,8 +25,8 @@ export const Leaderboard = ({ contractConfig }: { contractConfig: { address: str
   }, [projectArray]);
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <table className="table table-zebra w-full max-w-screen-xl shadow-lg">
+    <div className="flex w-full flex-col items-center">
+      <table className="table-zebra table w-full max-w-screen-xl shadow-lg">
         <thead>
           <tr>
             <th className="bg-primary">Rank</th>

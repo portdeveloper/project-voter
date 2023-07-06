@@ -3,13 +3,13 @@ interface VotersListProps {
 }
 
 export const VotersList = ({ voters }: VotersListProps) => (
-  <div className="rounded-md shadow-sm bg-secondary">
+  <div className="rounded-md bg-secondary shadow-sm">
     <h2 className="mb-2 text-xl text-primary-content">Your added voters:</h2>
     {voters.length > 0 ? (
-      <table className="table table-zebra mt-4 w-full">
+      <table className="table-zebra mt-4 table w-full">
         <thead>
           <tr>
-            <th className="text-left text-sm font-medium text-primary-content pb-2">Voter Address</th>
+            <th className="pb-2 text-left text-sm font-medium text-primary-content">Voter Address</th>
           </tr>
         </thead>
         <tbody>

@@ -82,7 +82,7 @@ export const ProjectsManager = ({ contractConfig }: { contractConfig: { address:
   });
 
   return (
-    <div className="p-6 rounded-md shadow-sm bg-secondary w-full">
+    <div className="w-full rounded-md bg-secondary p-6 shadow-sm">
       <AddProjectForm
         newProject={newProject}
         handleProjectChange={handleProjectChange}
@@ -90,7 +90,7 @@ export const ProjectsManager = ({ contractConfig }: { contractConfig: { address:
       />
       <div className="mt-4 text-xl text-primary-content">New Projects:</div>
       <div className="overflow-auto">
-        <table className="table-auto table-zebra table w-full mt-2 text-primary-content">
+        <table className="table-zebra mt-2 table w-full table-auto text-primary-content">
           <thead>
             <tr>
               <th>Name</th>
@@ -109,10 +109,10 @@ export const ProjectsManager = ({ contractConfig }: { contractConfig: { address:
                   <td>{project.name}</td>
                   <td>{project.url}</td>
                   <td className="flex items-center space-x-2">
-                    <button className="btn btn-xs btn-primary" onClick={() => handleProjectEdit(i)}>
+                    <button className="btn btn-primary btn-xs" onClick={() => handleProjectEdit(i)}>
                       Edit
                     </button>
-                    <button className="btn btn-xs btn-error" onClick={() => handleProjectDelete(i)}>
+                    <button className="btn btn-error btn-xs" onClick={() => handleProjectDelete(i)}>
                       Delete
                     </button>
                   </td>

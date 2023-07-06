@@ -3,14 +3,14 @@ interface ProjectsListProps {
 }
 
 export const ProjectsList = ({ projects }: ProjectsListProps) => (
-  <div className="rounded-md shadow-sm bg-secondary">
+  <div className="rounded-md bg-secondary shadow-sm">
     <h2 className="mb-2 text-xl text-primary-content">Your added projects:</h2>
     {projects.length > 0 ? (
-      <table className="table table-zebra mt-4 w-full">
+      <table className="table-zebra mt-4 table w-full">
         <thead>
           <tr>
-            <th className="text-left text-sm font-medium text-primary-content pb-2">Project Name</th>
-            <th className="text-left text-sm font-medium text-primary-content pb-2">Project URL</th>
+            <th className="pb-2 text-left text-sm font-medium text-primary-content">Project Name</th>
+            <th className="pb-2 text-left text-sm font-medium text-primary-content">Project URL</th>
           </tr>
         </thead>
         <tbody>

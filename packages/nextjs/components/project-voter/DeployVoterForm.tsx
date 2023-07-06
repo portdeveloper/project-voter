@@ -8,8 +8,7 @@ interface DeployVoterFormProps {
   HVFAbi: any[];
 }
 
-// @todo anyone should be able to create a hackathonVoter contract?
-//// but then how would the UI work? perhaps different orgs could fork and hardcode the factory address?
+// @todo Does not check the existance of the contract!
 
 export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) => {
   const [owner, setOwner] = useState("");
@@ -82,28 +81,28 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
   };
 
   return (
-    <div className="p-4 rounded-md w-full">
-      <form className="flex-col space-y-5 w-1/2">
+    <div className="w-full rounded-md p-4">
+      <form className="w-1/2 flex-col space-y-5">
         <input
           type="text"
           placeholder="Owner address"
           onChange={e => setOwner(e.target.value)}
           value={owner}
-          className="form-input w-full rounded-md px-4 py-2 shadow-md bg-primary"
+          className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
         />
         <input
           type="datetime-local"
           placeholder="Start time"
           onChange={e => setStartTime(new Date(e.target.value).getTime() / 1000)}
           value={new Date(startTime * 1000).toISOString().substring(0, 16)}
-          className="form-input w-full bg-primary rounded-md px-4 py-2 shadow-md"
+          className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
         />
         <input
           type="datetime-local"
           placeholder="End time"
           onChange={e => setEndTime(new Date(e.target.value).getTime() / 1000)}
           value={new Date(endTime * 1000).toISOString().substring(0, 16)}
-          className="form-input w-full rounded-md px-4 py-2 shadow-md bg-primary"
+          className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
         />
 
         <input
@@ -111,7 +110,7 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
           placeholder="Hackathon name"
           onChange={e => setHackathonName(e.target.value)}
           value={hackathonName}
-          className="form-input w-full rounded-md px-4 py-2 shadow-md bg-primary"
+          className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
         />
         <button onClick={handleSubmitData} className="btn btn-primary">
           Prepare Data
@@ -119,8 +118,8 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
       </form>
       {preparedData && (
         <>
-          <h3 className="text-lg font-bold my-3">Prepared Data:</h3>
-          <div className="card shadow-md w-2/5">
+          <h3 className="my-3 text-lg font-bold">Prepared Data:</h3>
+          <div className="card w-2/5 shadow-md">
             <div className="card-body bg-primary">
               <h2 className="card-title ">Hackathon Name: {preparedData.hackathonName}</h2>
               <p className="m-0 p-0">
@@ -137,10 +136,10 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
               </p>
               <p className="m-0 p-0">Owner: {preparedData.owner}</p>
               <div className="card-actions mt-2">
-                <button onClick={handleEditPreparedData} className="btn btn-xs btn-secondary">
+                <button onClick={handleEditPreparedData} className="btn btn-secondary btn-xs">
                   Edit
                 </button>
-                <button onClick={handleDeletePreparedData} className="btn btn-xs btn-error">
+                <button onClick={handleDeletePreparedData} className="btn btn-error btn-xs">
                   Delete
                 </button>
               </div>
@@ -161,7 +160,7 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
                 href={`https://etherscan.io/tx/${data.hash}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline text-blue-600"
+                className="text-blue-600 underline"
               >
                 View on Etherscan
               </a>
