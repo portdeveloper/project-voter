@@ -9,7 +9,7 @@ export const VoteButton = ({ index, contractConfig }: { index: number; contractC
     mode: "recklesslyUnprepared",
     args: [BigInt(index)],
     onError: (error: Error) => {
-      const simplifiedMessage = getParsedError(error.message);
+      const simplifiedMessage = getParsedError(error);
       notification.error(simplifiedMessage);
     },
   });
