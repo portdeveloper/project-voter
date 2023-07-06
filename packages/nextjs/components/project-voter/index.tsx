@@ -7,3 +7,4 @@ export * from "./VotersList";
 export * from "./VotersManager";
 export * from "./Leaderboard";
 export * from "./DeployVoterForm";
+export * from "./RemoveProjectButton";

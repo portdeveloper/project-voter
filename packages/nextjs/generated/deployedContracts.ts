@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         HackathonVoterFactory: {
-          address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           abi: [
             {
               inputs: [
@@ -17,6 +17,19 @@ const contracts = {
               ],
               stateMutability: "nonpayable",
               type: "constructor",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "hackathonId",
+                  type: "uint256",
+                },
+              ],
+              name: "HackathonRemoved",
+              type: "event",
             },
             {
               anonymous: false,
@@ -78,6 +91,11 @@ const contracts = {
                 {
                   components: [
                     {
+                      internalType: "uint256",
+                      name: "id",
+                      type: "uint256",
+                    },
+                    {
                       internalType: "address",
                       name: "hackathonVoterAddress",
                       type: "address",
@@ -136,6 +154,11 @@ const contracts = {
               name: "hackathons",
               outputs: [
                 {
+                  internalType: "uint256",
+                  name: "id",
+                  type: "uint256",
+                },
+                {
                   internalType: "address",
                   name: "hackathonVoterAddress",
                   type: "address",
@@ -170,6 +193,19 @@ const contracts = {
                 },
               ],
               stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "_hackathonId",
+                  type: "uint256",
+                },
+              ],
+              name: "removeHackathon",
+              outputs: [],
+              stateMutability: "nonpayable",
               type: "function",
             },
           ],
