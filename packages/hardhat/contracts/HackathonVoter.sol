@@ -109,6 +109,7 @@ contract HackathonVoter {
 		if (_projectId < projects.length - 1) {
 			projects[_projectId] = projects[projects.length - 1];
 		}
+		projects.pop();
 
 		emit ProjectRemoved(_projectId);
 	}

@@ -7,7 +7,6 @@ import { DeployVoterForm } from "~~/components/project-voter/";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 // @todo links look bad in dark theme
-// @todo
 
 const Home: NextPage = () => {
   const [tab, setTab] = useState("ongoing");

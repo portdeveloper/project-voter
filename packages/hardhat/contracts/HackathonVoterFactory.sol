@@ -5,6 +5,7 @@ import "./HackathonVoter.sol";
 
 contract HackathonVoterFactory {
 	struct Hackathon {
+		uint id;
 		address hackathonVoterAddress;
 		string name;
 		uint startTime;
@@ -28,6 +29,7 @@ contract HackathonVoterFactory {
 		address hackathonVoterAddress,
 		string hackathonName
 	);
+	event HackathonRemoved(uint indexed hackathonId);
 
 	function createHackathonVoter(
 		address _owner,
@@ -48,6 +50,7 @@ contract HackathonVoterFactory {
 		);
 		hackathons.push(
 			Hackathon({
+				id: hackathons.length,
 				hackathonVoterAddress: address(newHackathonVoter),
 				name: _hackathonName,
 				startTime: _startTime,
@@ -59,6 +62,16 @@ contract HackathonVoterFactory {
 			address(newHackathonVoter),
 			_hackathonName
 		);
+	}
+
+	function removeHackathon(uint _hackathonId) public onlyOwner {
+		require(_hackathonId < hackathons.length, "Invalid hackathon ID");
+		if (_hackathonId < hackathons.length - 1) {
+			hackathons[_hackathonId] = hackathons[hackathons.length - 1];
+		}
+		hackathons.pop();
+
+		emit HackathonRemoved(_hackathonId);
 	}
 
 	function getHackathons() public view returns (Hackathon[] memory) {
