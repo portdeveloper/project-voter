@@ -39,12 +39,12 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
 
   useEffect(() => {
     if (data) {
-      setPreparedData(null); // reset preparedData after successful contract deployment
+      setPreparedData(null);
     }
   }, [data]);
 
   const handleSubmitData = (event: any) => {
-    event.preventDefault(); // This will prevent the form submission from causing a page refresh
+    event.preventDefault();
 
     if (owner && hackathonName) {
       setPreparedData({
@@ -82,40 +82,56 @@ export const DeployVoterForm = ({ HVFAddress, HVFAbi }: DeployVoterFormProps) =>
 
   return (
     <div className="w-full rounded-md p-4">
-      <form className="w-1/2 flex-col space-y-5">
-        <input
-          type="text"
-          placeholder="Owner address"
-          onChange={e => setOwner(e.target.value)}
-          value={owner}
-          className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
-        />
-        <input
-          type="datetime-local"
-          placeholder="Start time"
-          onChange={e => setStartTime(new Date(e.target.value).getTime() / 1000)}
-          value={new Date(startTime * 1000).toISOString().substring(0, 16)}
-          className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
-        />
-        <input
-          type="datetime-local"
-          placeholder="End time"
-          onChange={e => setEndTime(new Date(e.target.value).getTime() / 1000)}
-          value={new Date(endTime * 1000).toISOString().substring(0, 16)}
-          className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
-        />
+      <form className="flex flex-col w-1/2 space-y-2">
+        <label htmlFor="owner-address" className="text-neutral">
+          Owner Address:
+          <input
+            id="owner-address"
+            type="text"
+            onChange={e => setOwner(e.target.value)}
+            value={owner}
+            className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
+          />
+        </label>
 
-        <input
-          type="text"
-          placeholder="Hackathon name"
-          onChange={e => setHackathonName(e.target.value)}
-          value={hackathonName}
-          className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
-        />
-        <button onClick={handleSubmitData} className="btn btn-primary">
+        <label htmlFor="start-time" className="text-neutral">
+          Start Date:
+          <input
+            id="start-time"
+            type="datetime-local"
+            onChange={e => setStartTime(new Date(e.target.value).getTime() / 1000)}
+            value={new Date(startTime * 1000).toISOString().substring(0, 16)}
+            className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
+          />
+        </label>
+
+        <label htmlFor="end-time" className="text-neutral">
+          End Date:
+          <input
+            id="end-time"
+            type="datetime-local"
+            onChange={e => setEndTime(new Date(e.target.value).getTime() / 1000)}
+            value={new Date(endTime * 1000).toISOString().substring(0, 16)}
+            className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md"
+          />
+        </label>
+
+        <label htmlFor="hackathon-name" className="text-neutral">
+          Hackathon Name:
+          <input
+            id="hackathon-name"
+            type="text"
+            onChange={e => setHackathonName(e.target.value)}
+            value={hackathonName}
+            className="form-input w-full rounded-md bg-primary px-4 py-2 shadow-md mb-5"
+          />
+        </label>
+
+        <button onClick={handleSubmitData} className="btn btn-neutral m">
           Prepare Data
         </button>
       </form>
+
       {preparedData && (
         <>
           <h3 className="my-3 text-lg font-bold">Prepared Data:</h3>

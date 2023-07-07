@@ -7,8 +7,6 @@ import { DeployVoterForm } from "~~/components/project-voter/";
 import { RemoveHackathonButton } from "~~/components/project-voter/RemoveHackathonButton";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
-// @todo links look bad in dark theme
-
 const Home: NextPage = () => {
   const [tab, setTab] = useState("ongoing");
 
