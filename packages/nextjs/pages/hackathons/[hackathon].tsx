@@ -82,39 +82,43 @@ const HackathonPage: NextPage = () => {
 
         {activeTab === "vote" ? (
           <div className="flex w-full flex-col items-center">
-            <table className="table-zebra table  w-full max-w-screen-xl shadow-lg">
-              <thead>
-                <tr>
-                  <th className="w-3/6 bg-primary">Project Name</th>
-                  <th className="w-2/6 bg-primary">Project URL</th>
-                  <th className="w-1/6 bg-primary">Vote Count</th>
-                  <th className="w-1/6 bg-primary text-end">Vote</th>
-                  {isOwner && <th className="w-1/6 bg-primary">Remove project</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {hackathonProjects?.map((project: any, index: number) => (
-                  <tr key={index}>
-                    <td className="w-2/6">{project.name}</td>
-                    <td className="w-2/6">
-                      <a href={project.url} target="_blank" rel="noreferrer" className="underline flex items-center">
-                        <LinkIcon className="h-5 w-5 cursor-pointer" aria-hidden="true" />
-                        {project.url}
-                      </a>
-                    </td>
-                    <td className="w-1/6">{BigInt(project.voteCount).toString()}</td>
-                    <td className="w-1/6 text-right">
-                      <VoteButton index={index} contractConfig={contractConfig} />
-                    </td>
-                    {isOwner && (
-                      <td>
-                        <RemoveProjectButton index={index} contractConfig={contractConfig} />
-                      </td>
-                    )}
+            {hackathonProjects && hackathonProjects.length > 0 ? (
+              <table className="table-zebra table  w-full max-w-screen-xl shadow-lg">
+                <thead>
+                  <tr>
+                    <th className="w-3/6 bg-primary">Project Name</th>
+                    <th className="w-2/6 bg-primary">Project URL</th>
+                    <th className="w-1/6 bg-primary">Vote Count</th>
+                    <th className="w-1/6 bg-primary text-end">Vote</th>
+                    {isOwner && <th className="w-1/6 bg-primary">Remove project</th>}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {hackathonProjects?.map((project: any, index: number) => (
+                    <tr key={index}>
+                      <td className="w-2/6">{project.name}</td>
+                      <td className="w-2/6">
+                        <a href={project.url} target="_blank" rel="noreferrer" className="underline flex items-center">
+                          <LinkIcon className="h-5 w-5 cursor-pointer" aria-hidden="true" />
+                          {project.url}
+                        </a>
+                      </td>
+                      <td className="w-1/6">{BigInt(project.voteCount).toString()}</td>
+                      <td className="w-1/6 text-right">
+                        <VoteButton index={index} contractConfig={contractConfig} />
+                      </td>
+                      {isOwner && (
+                        <td>
+                          <RemoveProjectButton index={index} contractConfig={contractConfig} />
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="rounded-lg bg-secondary p-4 text-white">There are no projects in this hackathon.</div>
+            )}
           </div>
         ) : activeTab === "add" ? (
           <div className="flex w-full gap-10 px-10">
